@@ -18,6 +18,11 @@
     "webpack-dev-server": "^1.14.1"
   },
   "dependencies": {
+<<<<<<< HEAD
     "normalize.css": "^5.0.0"
+=======
+    "css-loader": "^0.25.0",
+    "style-loader": "^0.13.1"
+>>>>>>> search deck
   }
 }
