@@ -5,97 +5,74 @@
 </head>
 <body>
   <div class="wrap">
-    <input type="text" placeholder="Search for cards">
-    <ul></ul>  
+    <div class="inputs"></div>
+    <br/>
+    <button>Add Rating</button>
+    <div class="msg"></div>
   </div>
 </body>
 <script type="text/javascript">
 
-function foundEl(first, second) {
-  return first.some(i => second.indexOf(i) >= 0)
-}
-
-class Card {
-  constructor(code, src, text){
-    this.code = code;
-    this.src = src;
-    this.text = text;
-  }
-}
-
-class SearchDeck {
+class StarWidget {
   constructor(){
-    this.getDeck()
-    this.setupEvents()
+    this.createStars()
+    this.addEvents()
   }
 
-  getDeck(){
-    const deck = fetch('https://deckofcardsapi.com/api/deck/new/shuffle/?deck_count=1')
-    deck.then(data => data.json()).then(data => {
-      this.id = data.deck_id
-      this.getCards(this.id)
-    })
-  }
-
-  getCards(id){
-    fetch(`https://deckofcardsapi.com/api/deck/${id}/draw/?count=52`)
-      .then(res => res.json())
-      .then(res => {
-        this.cards = res.cards.map(i => new Card(i.code, i.image, `${i.value} OF ${i.suit}`))
-        console.log(`got ${this.cards.length} cards`)
-      })
-  }
-
-  setupEvents(){
-    const input = document.querySelector('input')
-
-    input.addEventListener('keyup', (e) => {
-      const val = input.value.toUpperCase()
-      this.handleInput(val, e)
-    })
-  }
-
-  handleInput(val, e) {
-    const ul = document.querySelector('ul')
-
-    // reset auto list if there is no value
-    if (val.length == 0) return ul.innerHTML = ''
-    
-    // make set from current letters
-    const words = val.split(' ')
-    
-    // show only cards that contain current letters
-    const filtered = []
-
-    // show all by typing 'all'
-    if (words[0] === 'ALL') {
-      this.cards.forEach(i => {
-        filtered.push(i)
-      })
-    }
-
-    for (const i of this.cards){      
-
-      const found = i.text.split(' ')    
-      
-      if (foundEl(words, found)) {        
-        filtered.push(i)
-      }
-    }
-
-    // add all matching cards to html list
+  createStars(){
+    const arr = [1,2,3,4,5]
     const template = `
-      ${filtered.map(i => {
-        return `<li><img src='${i.src}'/></li>`
+      ${arr.map(i => {
+        return (`
+          <input type="checkbox" name="" id="${i}">
+          <label for="${i}">★</label>
+        `)
       }).join('')}
     `
-    ul.innerHTML = template  
+    const wrap = document.querySelector('.inputs')
+    wrap.innerHTML = template
   }
 
+  addEvents(){
+    const labels = document.querySelectorAll('label')
+    labels.forEach(i => {
+      i.addEventListener('mouseover', (e) => {
+        setTimeout(() => this.handleHover(e))
+      })
+    })
+
+    const button = document.querySelector('button')
+    button.addEventListener('click', () => this.submitRating())
+  }
+
+  handleHover(e){    
+    this.hovered = e.target.getAttribute('for')
+    const checks = document.querySelectorAll('input')  
+
+    checks.forEach(i => {
+      i.checked = false
+      if (i.id <= this.hovered) {
+        i.checked = true
+      }
+    })
+  }
+
+  submitRating() {
+    const rating = document.querySelectorAll('input:checked').length
+
+    const error = `<p class="error">Please choose a rating</p>`
+    const success = `<p class="success">Added a ${rating} star rating</p>`
+   
+    const msg = document.querySelector('.msg')
+    msg.innerHTML = (rating === 0) ? error : success
+
+    msg.style.opacity = 1
+    setTimeout(() => msg.style.opacity = 0, 2000)
+
+  }
 }
 
-const deck = new SearchDeck()
-
+new StarWidget()
 
 
 </script>
