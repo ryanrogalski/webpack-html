@@ -4,107 +4,99 @@
   <title></title>
 </head>
 <body>
+  <div class="wrap">
+    <input type="text" placeholder="Search for cards">
+    <ul></ul>  
+  </div>
 </body>
 <script type="text/javascript">
 
-class Player {
-  constructor(name, cards) {
-    this.name = name;
-    this.cards = [];
+function foundEl(first, second) {
+  return first.some(i => second.indexOf(i) >= 0)
+}
+
+class Card {
+  constructor(code, src, text){
+    this.code = code;
+    this.src = src;
+    this.text = text;
   }
 }
 
-class Game {
-  constructor(...args) {
-    if (args.length <= 4) {
-      this.players = [];
-      this.setupPlayers(args)
-      this.newDeck()
-    } else {
-      console.log('the game may only have up to 4 players');
-    }
+class SearchDeck {
+  constructor(){
+    this.getDeck()
+    this.setupEvents()
   }
 
-  setupPlayers(args) {
-    args.forEach(i => {
-      const p = new Player(i)
-      this.players.push(p)
-    })
-  }
-
-  getPlayerIndex(name) {
-    let index = null;
-    this.players.forEach((p, i) => {
-      if (p.name === name) {
-        index = i;
-      }
-    })
-    return index;
-  }
-
-  showPlayers() {
-    this.players.forEach(i => {
-      console.log(i);
-    })
-  }
-
-  showCards(name) {
-    const index = this.getPlayerIndex(name)
-    this.players[index].cards.forEach(i => {
-      console.log(i);
-    })
-  }
-
-  newDeck() {
+  getDeck(){
     const deck = fetch('https://deckofcardsapi.com/api/deck/new/shuffle/?deck_count=1')
-    deck
-      .then(data => data.json())
-      .then(data => {
-        this.id = data.deck_id;
-        console.log('got deck');
-        this.dealCards()
+    deck.then(data => data.json()).then(data => {
+      this.id = data.deck_id
+      this.getCards(this.id)
+    })
+  }
+
+  getCards(id){
+    fetch(`https://deckofcardsapi.com/api/deck/${id}/draw/?count=52`)
+      .then(res => res.json())
+      .then(res => {
+        this.cards = res.cards.map(i => new Card(i.code, i.image, `${i.value} OF ${i.suit}`))
+        console.log(`got ${this.cards.length} cards`)
       })
   }
 
-  removePlayer(name) {
-    const index = this.getPlayerIndex(name)
-    this.players.splice(index, 1)
-    console.log(this.players);
-    console.log(`removed ${name} from players, ${this.players.length} players left`);
+  setupEvents(){
+    const input = document.querySelector('input')
+
+    input.addEventListener('keyup', (e) => {
+      const val = input.value.toUpperCase()
+      this.handleInput(val, e)
+    })
   }
 
-  newPlayer(name) {
-    const players = this.players;
-    if (players.length < 4) {
-      players.push(new Player(name));
-      console.log(`the game now has ${players.length} players, welcome ${name}!`);
-    } else {
-      console.log('you already have 4 players');
+  handleInput(val, e) {
+    const ul = document.querySelector('ul')
+
+    // reset auto list if there is no value
+    if (val.length == 0) return ul.innerHTML = ''
+    
+    // make set from current letters
+    const words = val.split(' ')
+    
+    // show only cards that contain current letters
+    const filtered = []
+
+    // show all by typing 'all'
+    if (words[0] === 'ALL') {
+      this.cards.forEach(i => {
+        filtered.push(i)
+      })
     }
+
+    for (const i of this.cards){      
+
+      const found = i.text.split(' ')    
+      
+      if (foundEl(words, found)) {        
+        filtered.push(i)
+      }
+    }
+
+    // add all matching cards to html list
+    const template = `
+      ${filtered.map(i => {
+        return `<li><img src='${i.src}'/></li>`
+      }).join('')}
+    `
+    ul.innerHTML = template  
   }
 
-  dealCards() {
-    const names = []
-    this.players.forEach(i => names.push(i.name))
-    console.log(names);
-    names.forEach(i => this.getCard(i));
-  }
-
-  getCard(name) {
-    const deal = fetch(`https://deckofcardsapi.com/api/deck/${this.id}/draw/?count=1`)
-    deal
-      .then(data => data.json())
-      .then(data => {
-        const index = this.getPlayerIndex(name);
-        const card = data.cards[0].code;
-        this.players[index].cards.push(card);
-        console.log(`dealt ${card} to ${this.players[index].name}`);
-      })
-  }
 }
 
-const game = new Game('ryan', 'caleb', 'akiva')
-console.log(game);
+const deck = new SearchDeck()
+
+
 
 </script>
 </html>

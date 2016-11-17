@@ -1,0 +1,51 @@
+* {
+  box-sizing: border-box; 
+}
+
+html, body {
+  font-family: avenir;
+  margin: 0;
+  padding: 0;
+}
+
+input {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  transition: .2s all ease-in-out;
+  border: 1px solid #ddd;
+}
+
+input:focus {
+  outline: 0;
+  border-color: #72c7da;
+}
+
+ul {
+  margin: 20px 0 0;
+  padding: 0;
+}
+
+li {
+  list-style: none;
+  padding: 10px;
+  text-align: center;
+  border-top: 0;
+  float: left;
+  width: calc(10vw - 3px);
+}
+
+li:hover {
+  background: whitesmoke;
+  transition: .3s all ease-in-out;
+  cursor: pointer;
+}
+
+li img {
+  width: 100%;
+}
+
+.wrap {
+  padding: 15px;
+}
+

@@ -5,7 +5,7 @@
   "main": "webpack.config.js",
   "scripts": {
     "build": "webpack --config webpack.config.prod.js",
-    "dev": "webpack-dev-server --config webpack.config.dev.js"
+    "start": "webpack-dev-server --config webpack.config.dev.js"
   },
   "keywords": [],
   "author": "",
@@ -15,5 +15,9 @@
     "raw-loader": "^0.5.1",
     "webpack": "^1.12.13",
     "webpack-dev-server": "^1.14.1"
+  },
+  "dependencies": {
+    "css-loader": "^0.25.0",
+    "style-loader": "^0.13.1"
   }
 }
