@@ -4,19 +4,28 @@
   <title></title>
 </head>
 <body>
-  <div class="wrap">
-    <div class="inputs"></div>
-    <br/>
-    <button>Add Rating</button>
-    <div class="msg"></div>
-  </div>
+
 </body>
 <script type="text/javascript">
 
 class StarWidget {
   constructor(){
+    this.setup()
     this.createStars()
     this.addEvents()
+  }
+
+  setup(){
+    const template = `
+      <div class="wrap">
+        <div class="inputs"></div>
+        <br/>
+        <button>Add Rating</button>
+        <div class="msg"></div>
+      </div>
+    `
+
+    document.body.innerHTML = template
   }
 
   createStars(){
