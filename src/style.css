@@ -1,5 +1,4 @@
 * {
-<<<<<<< HEAD
   margin: 0;
   padding: 0;
 }
@@ -57,40 +56,7 @@ button {
 input:hover,
 button:hover {
   background: #e8e8e8;
-=======
-  box-sizing: border-box;
-  font-family: avenir;
-  letter-spacing: 0.08em
-}
-
-input {
-  display: none;
-}
-
-input + label {
-  color: gray;
-  width: 16px;
-  height: 16px;
-  display: inline-block;
-  padding: 0;
-  font-size: 20px;
-  margin-right: 4px;
-}
-
-input:checked + label {
-  color: #F18711;    
-}
-
-button {
-  background: whitesmoke;
-  border: 1px solid #ddd;
-  padding: 15px 20px;
-  margin: 40px;
-  outline: 0;
->>>>>>> rating widget
   cursor: pointer;
-  text-transform: uppercase;
-  font-size: 12px;    
 }
 input:active, input:focus,
 button:active,
@@ -98,7 +64,6 @@ button:focus {
   outline: 0;
 }
 
-<<<<<<< HEAD
 label {
   position: relative;
   margin: 0 10px;
@@ -118,33 +83,3 @@ label {
 .ghost-lg img {
   width: 30px;
 }
-=======
-.inputs, button {
-  display: inline-block;
-}
-
-p {
-  border: 1px solid #8ABF57;
-  background: #CEFFC0;
-  color: #4A6D2C;
-  padding: 15px;
-  margin: 0;
-}
-
-p.error {
-  border: 1px solid #CFC997;
-  background: #FFF8CB;
-  color: #5d5a4c;
-}
-
-.wrap {
-  text-align: center;
-  width: 300px;
-  margin: 100px auto 0;
-}
-
-.msg {
-  opacity: 0;
-  transition: .3s ease-in-out all;
-}
->>>>>>> rating widget
