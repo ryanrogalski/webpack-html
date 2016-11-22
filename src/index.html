@@ -4,9 +4,40 @@
   <title></title>
 </head>
 <body>
+<canvas></canvas>
 </body>
 <script type="text/javascript">
 
+const canvas = document.querySelector('canvas')
+const ctx = canvas.getContext('2d')
+canvas.width = window.innerWidth
+canvas.height = window.innerHeight
+
+let angle = 0
+
+function draw() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height)
+
+  ctx.fillStyle = "#FAFFF3"
+
+  ctx.fillRect(0, 0, canvas.width, canvas.height)
+
+  ctx.beginPath()
+
+  const radius = 25 + 150 * Math.abs(Math.cos(angle))
+
+  ctx.arc(225, 225, radius, 0, Math.PI * 2, false)
+  ctx.closePath()
+
+  ctx.fillStyle = "#7BF1FF"
+  ctx.fill()
+
+  angle += Math.PI / 64
+
+  requestAnimationFrame(draw)
+}
+
+draw()
 
 
 </script>
