@@ -3,13 +3,72 @@
 <head>
   <title></title>
 </head>
+<style type="text/css">
+  * {
+    margin: 0;
+    padding: 0;
+  }
+
+  .box {
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+    margin: auto;
+    background: #FF61FB;
+    transition: 1s ease-in-out all;
+    transform: scale(0);
+  }
+
+  .purple {
+    background: #463AFF;
+  }
+
+  .grow {
+    transform: scale(1);
+  }
+
+</style>
 <body>
+
+<div class="wrap">
+</div>
+
 </body>
 <script type="text/javascript">
 
-const details = ['wes bos', 123, 'wesbos.com']
+function randomColor() {
+  return '#'+Math.floor(Math.random()*16777215).toString(16);
+}
 
+class Box {
+  constructor() {
+    this.wrap = document.querySelector('.wrap')
+    this.makeBox()
+  }
 
+  makeBox(){
+    const first = document.createElement('div')
+    first.classList.add('box')
+    first.style.backgroundColor = randomColor()
+    this.wrap.appendChild(first)
+    setTimeout(() => first.classList.add('grow'))
+    this.removeBox()
+  }
+
+  removeBox() {
+    setTimeout(() => {
+      this.reset()
+    }, 1000)
+  }
+
+  reset(){
+    const old = document.querySelector('.grow')
+    this.wrap.removeChild(old)
+    this.makeBox()
+  }
+}
+
+const box = new Box()
 
 
 
