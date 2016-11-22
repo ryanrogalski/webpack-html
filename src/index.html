@@ -3,12 +3,183 @@
 <head>
   <title></title>
 </head>
+<style type="text/css">
+  * { margin: 0; padding: 0; }
+</style>
 <body>
+<canvas></canvas>
 </body>
 <script type="text/javascript">
 
-const details = ['wes bos', 123, 'wesbos.com']
 
+class Bubble {
+  constructor(rot, sign, speed, xInc, yInc, rad, iX, iY, color, canvas) {
+    this.rot = rot
+    this.sign = sign
+    this.speed = speed 
+    this.xInc = xInc
+    this.yInc = yInc 
+    this.rad = rad 
+    this.iX = this.curX = iX 
+    this.iY = this.curY = iY
+    this.color = color
+    this.counter = 0
+    this.angle = 0
+    this.canvas = canvas
+    this.ctx = canvas.getContext('2d')
+  }
+
+  update(){
+    this.counter++
+    this.angle += this.yInc
+    this.curY -= (this.speed + (this.counter * this.yInc) / 100 + Math.sin(this.angle) + 1)
+
+    if (this.curY < this.canvas.height) {
+      if (this.sign > 0) {
+        this.curX += (this.speed * this.xInc + this.rad * Math.cos(this.angle))
+      } else {
+        this.curX -= (this.speed * this.xInc - this.rad * Math.cos(this.angle))
+      }
+    }
+
+    if (this.curY * 2 < this.canvas.height) {
+      this.rad *= .95
+    }
+
+    if (this.width < 2) {
+      this.resetPosition()
+    }
+
+    if (this.curY < -100) {
+      this.resetPosition()
+    }
+
+    if ((this.curX > (this.canvas.width + 100)) || (this.curX < -100)) {
+      this.resetPosition()
+    }
+
+    this.ctx.beginPath()
+    this.ctx.arc(this.curX, this.curY, this.rad, 0, Math.PI * 2, false)
+    this.ctx.closePath()
+    this.ctx.fillStyle = this.color
+    this.ctx.fill()
+  }
+
+  resetPosition() {
+    this.counter = 0
+    this.curY = getYPosition(this.ctx)
+    this.curX = getXPosition(this.ctx)
+    this.xInc = getIncrement()
+    this.yInc = getIncrement()
+    this.rad = getBubbleRadius()
+    this.speed = getSpeed()
+    this.rot = getRotationRadius()
+  }
+
+}
+
+function getColor() {
+  var colors = ['#80F8E0', '#B1C3EC', '#85CFDD',
+    '#7DFAE0', '#A6EEDF', '#89F3ED',
+    '#B1C3EC', '#96CBDE', '#9CEDF5',
+    '#A6D4E6', '#B2E7F9', '#8EEBF6',
+    '#8EEBF6', '#88DFF1', '#85E2EC',
+    '#85E7CB', '#9EE4FB', '#8FD8EA',
+    '#A6D4E6', '#92C6E1', '#94CFF1',
+    '#A7E7EB', '#87E4EC'
+  ];
+
+  return (colors[Math.floor(Math.random() * colors.length)]);
+}
+
+function getRotationRadius() {
+  return (1 + Math.random() * 2);
+}
+
+function getBubbleRadius() {
+  return (Math.round(3 + Math.random() * 6));
+}
+
+
+function getSpeed() {
+  return (.2 + Math.random() * 3);
+}
+
+function getIncrement() {
+  return (.1 + Math.random() * .5);
+}
+
+function getXPosition(ctx) {
+  return (Math.round(-20 + Math.random() * (ctx.canvas.width + 40)));
+}
+
+function getYPosition(ctx) {
+  return (Math.round(ctx.canvas.height + Math.random() * 200));
+}
+
+function getSign() {
+  const arr = [-1, 1]
+  return arr[Math.floor(Math.random() * 2)]
+}
+
+class BubbleCanvas {
+  constructor(canvas) {
+    this.bubbles = []
+
+    this.ctx = canvas.getContext('2d')
+
+    canvas.width = window.innerWidth
+    canvas.height = window.innerHeight
+
+    this.cWidth = canvas.width
+    this.cHeight = canvas.height
+
+    this.addBubbles()
+    this.events()
+  }
+
+  events(){
+    window.addEventListener('resize', () => {
+      this.ctx.canvas.width = window.innerWidth
+      this.ctx.canvas.height = window.innerHeight
+    })
+  }
+
+  addBubbles() {
+    for (var i = 0; i < 50; i++) {
+      this.bubbles.push(new Bubble(
+        getRotationRadius(),
+        getSign(),
+        getSpeed(),
+        getIncrement(),
+        getIncrement(),
+        getBubbleRadius(),
+        getXPosition(this.ctx),
+        getYPosition(this.ctx),
+        getColor(),
+        this.ctx.canvas
+      ))
+    }
+    this.draw()
+  }
+
+  draw() {
+    this.ctx.clearRect(0, 0, this.cWidth, this.cHeight)
+    this.ctx.fillStyle = '#cff9fe'
+    this.ctx.fillRect(0, 0, this.cWidth, this.cHeight)
+
+    for (const i of this.bubbles) {
+      i.update()
+    }
+
+    requestAnimationFrame(() => this.draw())
+  }
+}
+
+
+const canvas = document.querySelector('canvas')
+
+new BubbleCanvas(canvas)
 
 
 
