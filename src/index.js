@@ -1,11 +1,6 @@
 require('./style.css')
 require('./index.html')
 
-const wrap = document.createElement('div')
-wrap.classList.add('color-wrap')
-
-document.body.appendChild(wrap)
-
 const RGB2Color = (r, g, b) => `#${byte2Hex(r)}${byte2Hex(g)}${byte2Hex(b)}`;
 
 const byte2Hex = (n) => {
@@ -118,6 +113,7 @@ class GhostDraw {
   }
 
   buildColorBar(frequency, phase1, phase2, phase3, center=128, width=127, len=50) {
+
     for (let i = 0; i < len; i++) {
       const red = Math.sin(frequency * i + phase1) * width + center;
       const grn = Math.sin(frequency * i + phase2) * width + center;
@@ -131,7 +127,7 @@ class GhostDraw {
       colorBlock.style.borderColor = bg
       colorBlock.style.backgroundColor = bg
 
-      wrap.appendChild(colorBlock);
+      this.colorWrap.appendChild(colorBlock);
     }
 
     this.setFirstColor()
@@ -139,11 +135,12 @@ class GhostDraw {
 
   setFirstColor() {
     this.colorList = [...document.querySelectorAll('.color-block')]
-    this.colorList[25].classList.add('selected')
-    this.color = this.colorList[25].getAttribute('color')
+    const mid = this.colorList[25]
+    mid.classList.add('selected')
+    this.color = mid.getAttribute('color')
   }
 
-  bindEvents() {
+  bindEvents() {    
     window.addEventListener('resize', () => this.canvasSize())
 
     this.colorWrap.addEventListener('click', (e) => {
