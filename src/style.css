@@ -29,7 +29,7 @@ body {
 
 .color-block.selected {
   transition: .1s ease-in-out all;
-  transform: scale(1, 2);
+  transform: scale(1, 1.5);
   border-color: white !important;
 }
 
