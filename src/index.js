@@ -123,20 +123,17 @@ class Ghost {
 
 class GhostDraw {
   constructor() {
+    this.size = 50
+    this.paint = false
     this.ghostArray = []
 
     this.svg = document.querySelector('.ghost')
 
     this.colorWrap = document.querySelector('.color-wrap')
-    this.colorWrap.childNodes[25].classList.add('selected')
-    const startColor = document.querySelector('.color-block.selected').getAttribute('color')
-    this.color = startColor
-    this.size = 50
+    this.colorList = [...document.querySelectorAll('.color-block')]
 
     this.canvas = document.querySelector('canvas')
     this.ctx = this.canvas.getContext('2d')
-
-    this.paint = false
 
     this.canvasSize = this.canvasSize.bind(this)
     this.pushGhost = this.pushGhost.bind(this)
@@ -150,11 +147,29 @@ class GhostDraw {
   bindEvents() {
     window.addEventListener('resize', () => this.canvasSize())
 
+    this.colorList[25].classList.add('selected')
+    this.color = this.colorList[25].getAttribute('color')
+
     this.colorWrap.addEventListener('click', (e) => {
+      
+      clearTimeout(this.colorTimeout)
+      this.colorTimeout = null
+
       const color = e.target.getAttribute('color')
-      this.colorWrap.childNodes.forEach(i => i.classList.remove('selected'))
       this.color = color
+
+      this.colorWrap.childNodes.forEach(i => i.classList.remove('selected'))
       e.target.classList.add('selected')
+    })    
+
+    this.colorWrap.addEventListener('dblclick', () => {
+      clearTimeout(this.colorTimeout)
+      this.colorTimeout = null
+
+      const cur = document.querySelector('.selected')
+      const index = this.colorList.indexOf(cur)
+
+      this.animateColorBar(index)
     })    
 
     this.canvas.addEventListener('mousedown', (e) => {
@@ -181,6 +196,29 @@ class GhostDraw {
       this.clearCycle()
       this.paint = false;
     })
+  }
+
+  animateColorBar(index) {    
+    const len = this.colorList.length - 1
+
+    if (index === len) {
+      index = 0
+    } else {
+      index++
+    }
+
+    this.colorTimeout = setTimeout(() => {
+      if (index === 0) {
+        this.colorList[len].classList.remove('selected')
+      } else {
+        this.colorList[index - 1].classList.remove('selected')
+      }
+      this.colorList[index].classList.add('selected')
+      const currentColor = this.colorList[index].getAttribute('color')
+      this.color = currentColor
+
+      this.animateColorBar(index)
+    }, 200)
   }
 
   clearCycle() {
