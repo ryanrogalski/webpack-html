@@ -6,9 +6,14 @@ wrap.classList.add('color-wrap')
 
 document.body.appendChild(wrap)
 
-const makeColorGradient = (frequency1, frequency2, frequency3,
-  phase1, phase2, phase3,
-  center, width, len) => {
+const RGB2Color = (r, g, b) => `#${byte2Hex(r)}${byte2Hex(g)}${byte2Hex(b)}`;
+
+const byte2Hex = (n) => {
+  var nybHexString = "0123456789ABCDEF";
+  return String(nybHexString.substr((n >> 4) & 0x0F, 1)) + nybHexString.substr(n & 0x0F, 1);
+}
+
+const makeColorGradient = (frequency1, frequency2, frequency3, phase1, phase2, phase3, center, width, len) => {
   if (center == undefined) center = 128;
   if (width == undefined) width = 127;
   if (len == undefined) len = 50;
@@ -30,14 +35,7 @@ const makeColorGradient = (frequency1, frequency2, frequency3,
   }
 }
 
-const RGB2Color = (r, g, b) => `#${byte2Hex(r)}${byte2Hex(g)}${byte2Hex(b)}`;
-
-const byte2Hex = (n) => {
-  var nybHexString = "0123456789ABCDEF";
-  return String(nybHexString.substr((n >> 4) & 0x0F, 1)) + nybHexString.substr(n & 0x0F, 1);
-}
-
-makeColorGradient(.3,.3,.3,0,2,4, 230,25)
+makeColorGradient(.3,.3,.3,0,2,4,200,55);
 
 const getRandom = (min, max) => {
   return Math.floor(Math.random() * (max - min + 1)) + min
