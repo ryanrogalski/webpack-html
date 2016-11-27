@@ -33,8 +33,7 @@ const avgColor = (a, b) => {
 
 class Ghost {
   constructor(size, img, x, y) {
-
-    const spread = size * 1.25
+    const spread = window.innerWidth / size
     this.alpha = 0
     this.startSize = size
     this.size = size / 3
@@ -86,7 +85,7 @@ class Ghost {
 
 class GhostDraw {
   constructor() {
-    this.coords = []
+    this.ghostArray = []
 
     this.svg = document.querySelector('.ghost')
 
@@ -174,14 +173,14 @@ class GhostDraw {
       const cur = rgb(`#${this.color}`)
       const color = avgColor(base, cur)
 
-      const p = new Ghost(
+      const g = new Ghost(
         getRandom(this.size - 20, this.size + 20),
         this.createImg(color),
         this.getMousePos(e).x,
         this.getMousePos(e).y
       )
 
-      this.coords.push(p)
+      this.ghostArray.push(g)
     }
   }
 
@@ -210,18 +209,18 @@ class GhostDraw {
   animateCanvas(ts) {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
 
-    if (this.coords.length > 0) {
-      for (const p of this.coords) {
-        if (p.dead) {
-          const i = this.coords.indexOf(p)
-          this.coords.splice(i, 1)
+    if (this.ghostArray.length > 0) {
+      for (const g of this.ghostArray) {
+        if (g.dead) {
+          const i = this.ghostArray.indexOf(g)
+          this.ghostArray.splice(i, 1)
         } else {
-          const x = p.x - (p.size / 2)
-          const y = p.y - (p.size / 2)
+          const x = g.x - (g.size / 2)
+          const y = g.y - (g.size / 2)
 
-          this.ctx.globalAlpha = p.alpha
-          this.ctx.drawImage(p.img, x, y, p.size, p.size)
-          p.animate(ts)
+          this.ctx.globalAlpha = g.alpha
+          this.ctx.drawImage(g.img, x, y, g.size, g.size)
+          g.animate(ts)
         }
       }
     }
