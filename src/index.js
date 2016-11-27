@@ -35,7 +35,7 @@ const makeColorGradient = (frequency1, frequency2, frequency3, phase1, phase2, p
   }
 }
 
-makeColorGradient(.3,.3,.3,0,2,4,200,55);
+makeColorGradient(.3,.3,.3,0,2,4,200,50);
 
 const getRandom = (min, max) => {
   return Math.floor(Math.random() * (max - min + 1)) + min
@@ -199,11 +199,7 @@ class GhostDraw {
   animateColorBar(index) {    
     const len = this.colorList.length - 1
 
-    if (index === len) {
-      index = 0
-    } else {
-      index++
-    }
+    index === len ? index = 0 : index++
 
     this.colorTimeout = setTimeout(() => {
       if (index === 0) {
@@ -216,7 +212,7 @@ class GhostDraw {
       this.color = currentColor
 
       this.animateColorBar(index)
-    }, 200)
+    }, 400)
   }
 
   clearCycle() {
