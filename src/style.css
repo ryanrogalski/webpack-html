@@ -33,80 +33,12 @@ body {
   border-color: white !important;
 }
 
-.header {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  display: flex;
-  flex-wrap: nowrap;
-  padding: 10px;
-}
-
-.header-group {
-  flex-basis: 33.33%;
-}
-.header-group p {
-  display: inline-block;
-  margin: 5px 0 0;
-}
-
-.header-group:first-child {
-  order: 1;
-}
-
-.header-group:nth-child(2) {
-  order: 2;
-  text-align: center;
-}
-
-.header-group:nth-child(3) {
-  order: 3;
-  text-align: right;
-}
-
 canvas {
   z-index: 0;
   cursor: crosshair;
-}
-
-input,
-button {
-  display: inline-block;
-  border-radius: 2px;
-  padding: 5px 10px;
-  background: whitesmoke;
-  border: 1px solid #ddd;
-}
-
-input:hover,
-button:hover {
-  background: #e8e8e8;
-  cursor: pointer;
-}
-
-input:active, input:focus,
-button:active,
-button:focus {
-  outline: 0;
-}
-
-label {
-  position: relative;
-  margin: 0 10px;
-  color: #7B7B7B;
 }
 
 .ghost-wrap {
   display: none;
 }
 
-.ghost-sm img {
-  width: 20px;
-  position: relative;
-  top: -3px;
-}
-
-.ghost-lg img {
-  width: 30px;
-}
