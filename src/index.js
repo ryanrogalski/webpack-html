@@ -145,8 +145,7 @@ class GhostDraw {
   bindEvents() {
     window.addEventListener('resize', () => this.canvasSize())
 
-    this.colorList[25].classList.add('selected')
-    this.color = this.colorList[25].getAttribute('color')
+    this.animateColorBar(49)
 
     this.colorWrap.addEventListener('click', (e) => {
       
