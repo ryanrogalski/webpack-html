@@ -37,7 +37,7 @@ class Ghost {
     const spread = size * 1.2
     this.alpha = 0
     this.startSize = size
-    this.size = this.startSize / 2
+    this.size = size / 2
     this.baby = true
     this.img = img
     this.cx = getRandom(x - spread, x + spread)
@@ -88,7 +88,7 @@ class GhostDraw {
     this.svg = document.querySelector('.ghost')
 
     this.sizeSlider = document.querySelector('.slider')
-    this.sizeSlider.value = this.size = Math.floor(window.innerWidth / 30)
+    this.sizeSlider.value = this.size = 30
 
     this.colorSlider = document.querySelector('.jscolor')
     this.colorSlider.value = this.color = 'BDFAFF'    
@@ -163,7 +163,7 @@ class GhostDraw {
   }
 
   pushGhost(e) {
-    const cloudSize = Math.floor(100 / this.size)
+    const cloudSize = Math.floor(80 / this.size)
 
     for (let i = 0; i < cloudSize; i++) {
 
