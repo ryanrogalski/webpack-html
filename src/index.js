@@ -13,30 +13,6 @@ const byte2Hex = (n) => {
   return String(nybHexString.substr((n >> 4) & 0x0F, 1)) + nybHexString.substr(n & 0x0F, 1);
 }
 
-const makeColorGradient = (frequency1, frequency2, frequency3, phase1, phase2, phase3, center, width, len) => {
-  if (center == undefined) center = 128;
-  if (width == undefined) width = 127;
-  if (len == undefined) len = 50;
-
-  for (var i = 0; i < len; ++i) {
-    var red = Math.sin(frequency1 * i + phase1) * width + center;
-    var grn = Math.sin(frequency2 * i + phase2) * width + center;
-    var blu = Math.sin(frequency3 * i + phase3) * width + center;
-
-    const colorBlock = document.createElement('div')
-    colorBlock.classList.add('color-block')
-    const bg = RGB2Color(red, grn, blu)
-    colorBlock.setAttribute('color', bg)
-    
-    colorBlock.style.borderColor = bg
-    colorBlock.style.backgroundColor = bg
-
-    wrap.appendChild(colorBlock);
-  }
-}
-
-makeColorGradient(.3,.3,.3,0,2,4,200,50);
-
 const getRandom = (min, max) => {
   return Math.floor(Math.random() * (max - min + 1)) + min
 }
@@ -128,7 +104,6 @@ class GhostDraw {
     this.svg = document.querySelector('.ghost')
 
     this.colorWrap = document.querySelector('.color-wrap')
-    this.colorList = [...document.querySelectorAll('.color-block')]
 
     this.canvas = document.querySelector('canvas')
     this.ctx = this.canvas.getContext('2d')
@@ -137,15 +112,39 @@ class GhostDraw {
     this.pushGhost = this.pushGhost.bind(this)
 
     this.bindEvents()
+    this.buildColorBar(.1,0,2,4,200,50)
     this.canvasSize()
-
     this.animateCanvas()
+  }
+
+  buildColorBar(frequency, phase1, phase2, phase3, center=128, width=127, len=50) {
+    for (let i = 0; i < len; ++i) {
+      const red = Math.sin(frequency * i + phase1) * width + center;
+      const grn = Math.sin(frequency * i + phase2) * width + center;
+      const blu = Math.sin(frequency * i + phase3) * width + center;
+
+      const colorBlock = document.createElement('div')
+      colorBlock.classList.add('color-block')
+      const bg = RGB2Color(red, grn, blu)
+      colorBlock.setAttribute('color', bg)
+
+      colorBlock.style.borderColor = bg
+      colorBlock.style.backgroundColor = bg
+
+      wrap.appendChild(colorBlock);
+    }
+
+    this.setFirstColor()
+  }
+
+  setFirstColor() {
+    this.colorList = [...document.querySelectorAll('.color-block')]
+    this.colorList[25].classList.add('selected')
+    this.color = this.colorList[25].getAttribute('color')
   }
 
   bindEvents() {
     window.addEventListener('resize', () => this.canvasSize())
-
-    this.animateColorBar(49)
 
     this.colorWrap.addEventListener('click', (e) => {
       
