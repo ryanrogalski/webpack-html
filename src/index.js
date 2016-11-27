@@ -118,7 +118,7 @@ class GhostDraw {
   }
 
   buildColorBar(frequency, phase1, phase2, phase3, center=128, width=127, len=50) {
-    for (let i = 0; i < len; ++i) {
+    for (let i = 0; i < len; i++) {
       const red = Math.sin(frequency * i + phase1) * width + center;
       const grn = Math.sin(frequency * i + phase2) * width + center;
       const blu = Math.sin(frequency * i + phase3) * width + center;
