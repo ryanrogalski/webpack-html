@@ -53,11 +53,13 @@ button {
   background: whitesmoke;
   border: 1px solid #ddd;
 }
+
 input:hover,
 button:hover {
   background: #e8e8e8;
   cursor: pointer;
 }
+
 input:active, input:focus,
 button:active,
 button:focus {
