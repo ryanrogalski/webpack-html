@@ -107,39 +107,14 @@ class GhostDraw {
       this.color = this.colorSlider.value;
     })
 
-<<<<<<< HEAD
     this.canvas.addEventListener('mousemove', (e) => {
       this.clearCycle()
       this.pushPoint(e)
       this.cycle = setInterval(() => this.pushPoint(e), 100)
-=======
-    this.canvas.addEventListener('mousedown', (e) => {
-      this.paint = true;
-      this.pushPoint(e)
-      this.cycle = setInterval(() => this.pushPoint(e), 100)
-    })
-
-    this.canvas.addEventListener('mousemove', (e) => {
-      this.clearCycle()
-
-      if (this.paint) {
-        this.pushPoint(e)
-        this.cycle = setInterval(() => this.pushPoint(e), 100)
-      }
-    })
-
-    this.canvas.addEventListener('mouseup', (e) => {
-      this.clearCycle()
-      this.paint = false;
->>>>>>> ghost cloud
     })
 
     this.canvas.addEventListener('mouseleave', (e) => {
       this.clearCycle()
-<<<<<<< HEAD
-=======
-      this.paint = false;
->>>>>>> ghost cloud
     })
   }
 
