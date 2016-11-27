@@ -31,12 +31,14 @@ const avgColor = (a, b) => {
   return res;
 }
 
-class Point {
+class Ghost {
   constructor(size, img, x, y){
 
-    const spread = size / 1.5
-
+    const spread = size * 1.2
+    this.alpha = 0
     this.startSize = size
+    this.size = this.startSize / 2
+    this.baby = true
     this.img = img
     this.cx = getRandom(x - spread, x + spread)
     this.cy = getRandom(y - spread, y + spread)
@@ -50,8 +52,8 @@ class Point {
 
   animate(ts){
     const elapsed = ts - this.birthday 
-    const inc = this.startSize / 100
-    
+    const inc = this.startSize / 500
+
     this.angle = Math.PI * (ts / this.speed)
 
     if (this.direction === 1) {
@@ -62,9 +64,18 @@ class Point {
       this.y = this.cy + Math.cos(this.angle) * this.radius  
     }
 
-    this.size = this.startSize - ((elapsed / 8) * inc)
+    this.alpha = (this.size / this.startSize)
 
-    if (this.size < 0){
+    if (this.baby) {      
+      this.size = this.size + ((elapsed * 5) * inc)    
+    } else {
+      this.size = this.startSize - ((elapsed / 2) * inc)
+    }
+
+    if (this.size >= this.startSize) {
+      this.baby = false
+      this.startSize = this.size
+    } else if (this.size < 0) {
       this.dead = true 
     }
   }
@@ -88,7 +99,7 @@ class GhostDraw {
     this.paint = false
 
     this.canvasSize = this.canvasSize.bind(this)
-    this.pushPoint = this.pushPoint.bind(this)
+    this.pushGhost = this.pushGhost.bind(this)
 
     this.bindEvents()
     this.canvasSize()
@@ -101,6 +112,7 @@ class GhostDraw {
 
     this.sizeSlider.addEventListener('change', () => {
       this.size = Number(this.sizeSlider.value)
+      console.log(this.size);
     })
 
     this.colorSlider.addEventListener('change', () => {
@@ -109,16 +121,16 @@ class GhostDraw {
 
     this.canvas.addEventListener('mousedown', (e) => {
       this.paint = true;
-      this.pushPoint(e)
-      this.cycle = setInterval(() => this.pushPoint(e), 100)
+      this.pushGhost(e)
+      this.cycle = setInterval(() => this.pushGhost(e), 100)
     })
 
     this.canvas.addEventListener('mousemove', (e) => {
       this.clearCycle()
 
       if (this.paint) {
-        this.pushPoint(e)
-        this.cycle = setInterval(() => this.pushPoint(e), 100)
+        this.pushGhost(e)
+        this.cycle = setInterval(() => this.pushGhost(e), 100)
       }
     })
 
@@ -150,7 +162,7 @@ class GhostDraw {
     lg.appendChild(img.cloneNode(true))
   }
 
-  pushPoint(e) {
+  pushGhost(e) {
     const cloudSize = Math.floor(100 / this.size)
 
     for (let i = 0; i < cloudSize; i++) {
@@ -159,7 +171,7 @@ class GhostDraw {
       const cur = rgb(`#${this.color}`)
       const color = avgColor(base, cur)
 
-      const p = new Point(
+      const p = new Ghost(
         getRandom(this.size - 20, this.size + 20),
         this.createImg(color),
         this.getMousePos(e).x,
@@ -202,7 +214,9 @@ class GhostDraw {
           this.coords.splice(i, 1)
         } else {
           const x = p.x - (p.size / 2)
-          const y = p.y - (p.size / 2)        
+          const y = p.y - (p.size / 2) 
+
+          this.ctx.globalAlpha = p.alpha       
           this.ctx.drawImage(p.img, x, y, p.size, p.size)    
           p.animate(ts)
         }        
