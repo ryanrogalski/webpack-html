@@ -8,6 +8,30 @@ body {
   font-family: avenir;
 }
 
+.color-wrap {
+  position: fixed;
+  width: 100vw;
+  top: 0;
+}
+
+.color-block {
+  height: 2vw;
+  width: calc(2vw - 2px);
+  display: block;
+  float: left;
+  margin: 0;
+  padding: 0;
+  cursor: pointer;
+  transition: .3s ease-in-out all;
+  transform: translate3d(0, 0, 0);
+  border: 1px solid;
+}
+
+.color-block.selected {
+  transform: scale(1, 2);
+  border-color: white !important;
+}
+
 .header {
   position: fixed;
   top: 0;

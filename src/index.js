@@ -1,6 +1,44 @@
 require('./style.css')
 require('./index.html')
 
+const wrap = document.createElement('div')
+wrap.classList.add('color-wrap')
+
+document.body.appendChild(wrap)
+
+const makeColorGradient = (frequency1, frequency2, frequency3,
+  phase1, phase2, phase3,
+  center, width, len) => {
+  if (center == undefined) center = 128;
+  if (width == undefined) width = 127;
+  if (len == undefined) len = 50;
+
+  for (var i = 0; i < len; ++i) {
+    var red = Math.sin(frequency1 * i + phase1) * width + center;
+    var grn = Math.sin(frequency2 * i + phase2) * width + center;
+    var blu = Math.sin(frequency3 * i + phase3) * width + center;
+
+    const colorBlock = document.createElement('div')
+    colorBlock.classList.add('color-block')
+    const bg = RGB2Color(red, grn, blu)
+    colorBlock.setAttribute('color', bg)
+    
+    colorBlock.style.borderColor = bg
+    colorBlock.style.backgroundColor = bg
+
+    wrap.appendChild(colorBlock);
+  }
+}
+
+const RGB2Color = (r, g, b) => `#${byte2Hex(r)}${byte2Hex(g)}${byte2Hex(b)}`;
+
+const byte2Hex = (n) => {
+  var nybHexString = "0123456789ABCDEF";
+  return String(nybHexString.substr((n >> 4) & 0x0F, 1)) + nybHexString.substr(n & 0x0F, 1);
+}
+
+makeColorGradient(.3,.3,.3,0,2,4, 230,25)
+
 const getRandom = (min, max) => {
   return Math.floor(Math.random() * (max - min + 1)) + min
 }
@@ -59,8 +97,8 @@ class Ghost {
       this.x = this.cx + Math.cos(this.angle) * this.radius
       this.y = this.cy + Math.sin(this.angle) * this.radius
     } else {
-      this.x = this.cx + Math.sin(this.angle) * this.radius
-      this.y = this.cy + Math.cos(this.angle) * this.radius
+      this.x = this.cx - Math.sin(this.angle) * this.radius
+      this.y = this.cy - Math.cos(this.angle) * this.radius
     }          
     
     this.alpha = (this.size / this.startSize)
@@ -89,11 +127,11 @@ class GhostDraw {
 
     this.svg = document.querySelector('.ghost')
 
-    this.sizeSlider = document.querySelector('.slider')
-    this.sizeSlider.value = this.size = 30
-
-    this.colorSlider = document.querySelector('.jscolor')
-    this.colorSlider.value = this.color = 'BDFAFF'
+    this.colorWrap = document.querySelector('.color-wrap')
+    this.colorWrap.childNodes[25].classList.add('selected')
+    const startColor = document.querySelector('.color-block.selected').getAttribute('color')
+    this.color = startColor
+    this.size = 50
 
     this.canvas = document.querySelector('canvas')
     this.ctx = this.canvas.getContext('2d')
@@ -105,21 +143,19 @@ class GhostDraw {
 
     this.bindEvents()
     this.canvasSize()
-    this.sizingGhosts()
+
     this.animateCanvas()
   }
 
   bindEvents() {
     window.addEventListener('resize', () => this.canvasSize())
 
-    this.sizeSlider.addEventListener('change', () => {
-      this.size = Number(this.sizeSlider.value)
-      console.log(this.size);
-    })
-
-    this.colorSlider.addEventListener('change', () => {
-      this.color = this.colorSlider.value;
-    })
+    this.colorWrap.addEventListener('click', (e) => {
+      const color = e.target.getAttribute('color')
+      this.colorWrap.childNodes.forEach(i => i.classList.remove('selected'))
+      this.color = color
+      e.target.classList.add('selected')
+    })    
 
     this.canvas.addEventListener('mousedown', (e) => {
       this.paint = true;
@@ -150,18 +186,6 @@ class GhostDraw {
   clearCycle() {
     clearInterval(this.cycle)
     this.cycle = null
-  }
-
-  sizingGhosts() {
-    const sm = document.querySelector('.ghost-sm')
-    const lg = document.querySelector('.ghost-lg')
-    const xml = (new XMLSerializer).serializeToString(this.svg)
-
-    const img = new Image()
-    img.src = `data:image/svg+xml;charset=utf-8,${xml}`
-
-    sm.appendChild(img)
-    lg.appendChild(img.cloneNode(true))
   }
 
   pushGhost(e) {
