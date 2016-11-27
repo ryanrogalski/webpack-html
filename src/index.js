@@ -1,6 +1,5 @@
 require('./style.css')
 require('./index.html')
-
 const getRandom = (min, max) => {
   return Math.floor(Math.random() * (max - min + 1)) + min
 }
@@ -33,7 +32,7 @@ const avgColor = (a, b) => {
 
 class Ghost {
   constructor(size, img, x, y) {
-    const spread = window.innerWidth / size
+    const spread = size * getRandomDec(.2, 1.2)
     this.alpha = 0
     this.startSize = size
     this.size = size / 3
@@ -61,23 +60,23 @@ class Ghost {
     } else {
       this.x = this.cx + Math.sin(this.angle) * this.radius
       this.y = this.cy + Math.cos(this.angle) * this.radius
-    }
-
+    }          
     
-
-    if (this.baby) {
-      this.alpha = (this.size / this.startSize)
+    this.alpha = (this.size / this.startSize)
+    
+    if (this.baby) {    
       this.size = this.size + (elapsed * inc)
-    } else {
-      this.alpha = (this.size > (this.startSize * .75)) ? 1 : (this.size / this.startSize)
-      this.size = this.startSize - ((elapsed / 2) * inc)
+    } else {      
+      this.size = this.startSize - ((elapsed / 2.2) * inc)
     }
 
     if (this.size >= this.startSize) {
       this.baby = false
       this.saveTime = ts
       this.startSize = this.size
-    } else if (this.size < 0) {
+    }
+    
+    if (this.size < 0) {
       this.dead = true
     }
   }
@@ -165,7 +164,7 @@ class GhostDraw {
   }
 
   pushGhost(e) {
-    const cloudSize = Math.floor(80 / this.size)
+    const cloudSize = Math.floor(getRandom(50, 150) / this.size)
 
     for (let i = 0; i < cloudSize; i++) {
 
