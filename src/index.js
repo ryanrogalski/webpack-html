@@ -90,7 +90,7 @@ class Ghost {
   }
 }
 
-class GhostDraw {
+class GhostCloud {
   constructor() {
     this.size = 50
     this.paint = false
@@ -280,4 +280,4 @@ class GhostDraw {
   }
 }
 
-new GhostDraw()
+new GhostCloud()
