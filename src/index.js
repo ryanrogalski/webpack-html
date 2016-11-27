@@ -10,13 +10,13 @@ const getRandomDec = (min, max) => {
 }
 
 const getDirection = () => {
-  const arr = [-1,1]
+  const arr = [-1, 1]
   return arr[getRandom(0, 1)]
 }
 
-const rgb = (str) => str.match(/\w\w/g).map(b => parseInt(b,16));
+const rgb = (str) => str.match(/\w\w/g).map(b => parseInt(b, 16));
 
-const randomColor = () => Math.floor(Math.random()*16777215).toString(16);
+const randomColor = () => Math.floor(Math.random() * 16777215).toString(16);
 
 const avgColor = (a, b) => {
   const color = []
@@ -32,12 +32,12 @@ const avgColor = (a, b) => {
 }
 
 class Ghost {
-  constructor(size, img, x, y){
+  constructor(size, img, x, y) {
 
-    const spread = size * 1.2
+    const spread = size * 1.25
     this.alpha = 0
     this.startSize = size
-    this.size = size / 2
+    this.size = size / 3
     this.baby = true
     this.img = img
     this.cx = getRandom(x - spread, x + spread)
@@ -47,11 +47,11 @@ class Ghost {
     this.direction = getDirection()
     this.dead = false
     this.angle = 0
-    this.birthday = performance.now()
+    this.saveTime = performance.now()
   }
 
-  animate(ts){
-    const elapsed = ts - this.birthday 
+  animate(ts) {
+    const elapsed = ts - this.saveTime
     const inc = this.startSize / 500
 
     this.angle = Math.PI * (ts / this.speed)
@@ -61,22 +61,25 @@ class Ghost {
       this.y = this.cy + Math.sin(this.angle) * this.radius
     } else {
       this.x = this.cx + Math.sin(this.angle) * this.radius
-      this.y = this.cy + Math.cos(this.angle) * this.radius  
+      this.y = this.cy + Math.cos(this.angle) * this.radius
     }
 
-    this.alpha = (this.size / this.startSize)
+    
 
-    if (this.baby) {      
-      this.size = this.size + ((elapsed * 5) * inc)    
+    if (this.baby) {
+      this.alpha = (this.size / this.startSize)
+      this.size = this.size + (elapsed * inc)
     } else {
+      this.alpha = (this.size > (this.startSize * .75)) ? 1 : (this.size / this.startSize)
       this.size = this.startSize - ((elapsed / 2) * inc)
     }
 
     if (this.size >= this.startSize) {
       this.baby = false
+      this.saveTime = ts
       this.startSize = this.size
     } else if (this.size < 0) {
-      this.dead = true 
+      this.dead = true
     }
   }
 }
@@ -91,11 +94,11 @@ class GhostDraw {
     this.sizeSlider.value = this.size = 30
 
     this.colorSlider = document.querySelector('.jscolor')
-    this.colorSlider.value = this.color = 'BDFAFF'    
+    this.colorSlider.value = this.color = 'BDFAFF'
 
     this.canvas = document.querySelector('canvas')
     this.ctx = this.canvas.getContext('2d')
-    
+
     this.paint = false
 
     this.canvasSize = this.canvasSize.bind(this)
@@ -107,7 +110,7 @@ class GhostDraw {
     this.animateCanvas()
   }
 
-  bindEvents() {    
+  bindEvents() {
     window.addEventListener('resize', () => this.canvasSize())
 
     this.sizeSlider.addEventListener('change', () => {
@@ -198,7 +201,7 @@ class GhostDraw {
       y: e.clientY - rect.top
     }
   }
-  
+
   canvasSize() {
     this.canvas.width = window.innerWidth
     this.canvas.height = window.innerHeight
@@ -214,15 +217,15 @@ class GhostDraw {
           this.coords.splice(i, 1)
         } else {
           const x = p.x - (p.size / 2)
-          const y = p.y - (p.size / 2) 
+          const y = p.y - (p.size / 2)
 
-          this.ctx.globalAlpha = p.alpha       
-          this.ctx.drawImage(p.img, x, y, p.size, p.size)    
+          this.ctx.globalAlpha = p.alpha
+          this.ctx.drawImage(p.img, x, y, p.size, p.size)
           p.animate(ts)
-        }        
-      }      
+        }
+      }
     }
-     
+
     requestAnimationFrame((ts) => this.animateCanvas(ts))
   }
 }
