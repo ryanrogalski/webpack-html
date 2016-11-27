@@ -92,8 +92,8 @@ class GhostDraw {
     this.sizeSlider = document.querySelector('.slider')
     this.sizeSlider.value = this.size = 30
 
-    this.colorSlider = document.querySelector('.jscolor')
-    this.colorSlider.value = this.color = 'BDFAFF'
+    this.colorSlider = document.querySelector('.color-input')
+    this.colorSlider.value = this.color = '#6f74ff'
 
     this.canvas = document.querySelector('canvas')
     this.ctx = this.canvas.getContext('2d')

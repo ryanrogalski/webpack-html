@@ -60,11 +60,29 @@ button:hover {
   cursor: pointer;
 }
 
-input:active, input:focus,
+input:active, 
+input:focus,
 button:active,
 button:focus {
   outline: 0;
 }
+
+.color-input {
+  width: 200px;
+  margin: 0;
+  padding: 0;
+  background: none;
+  border: 0;
+  height: 30px;
+}
+
+.color-input:hover, 
+.color-input:active,
+.color-input:focus, {
+  background: 0 !important;
+  border: 0 !important;
+}
+
 
 label {
   position: relative;
