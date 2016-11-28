@@ -3,9 +3,152 @@
 <head>
   <title></title>
 </head>
+<style type="text/css">
+  * {
+    box-sizing: border-box;
+  }
+  .board {
+    margin: auto;
+    width: 200px;
+  }
+
+  .tile {
+    float: left;
+    width: 20px;
+    height: 20px;
+    background: #FEB1B4;
+    border: 1px solid white;
+  }
+
+  .tile.live {
+    background: #8F8AFF;
+  }
+
+</style>
 <body>
+<div class="board"></div>
 </body>
 <script type="text/javascript">
+
+
+function makeBoard(rows, cols) {
+
+  const board = document.querySelector('.board')
+  const tiles = []
+
+  for (var i = 0; i < rows; i++) {
+    const row = document.createElement('div');
+    row.classList.add('row')
+
+    for (let j = 0; j < cols; j++) {
+      const tile = document.createElement('div')
+      tile.classList.add('tile')
+      row.appendChild(tile)
+    }
+
+    tiles.push(row)
+  }
+
+  for (const i of tiles) {
+    board.appendChild(i)
+  }
+}
+
+makeBoard(10, 10)
+
+function getTiles() {
+  const len = document.querySelector('.row').childNodes.length
+  const tiles = [...document.querySelectorAll('.tile')]
+  const rows = [...document.querySelectorAll('.row')]
+  const array = []
+
+  for (const row of rows){
+    const a = []
+
+    for (const t of row.childNodes){
+      a.push(t)
+    }
+
+    array.push(a)
+  }
+
+  return array
+}
+
+const tiles = getTiles()
+
+function findSiblings(arr, r, c) {
+  const out =[]
+
+  for (const [i, row] of arr.entries()) {
+    for (const [j, tile] of row.entries()) {
+      
+      if (i === r - 1 && j === c - 1 ) out.push(tile)        
+      if (i === r - 1 && j === c) out.push(tile)      
+      if (i === r - 1 && j === c + 1 ) out.push(tile)      
+
+      if (i === r && j === c - 1 ) out.push(tile)        
+      if (i === r && j === c + 1) out.push(tile)
+      
+      if (i === r + 1 && j === c - 1 ) out.push(tile)        
+      if (i === r + 1 && j === c) out.push(tile)      
+      if (i === r + 1 && j === c + 1 ) out.push(tile)      
+  
+    }
+  }
+
+  return out
+}
+
+
+function checkTiles(arr) {
+  for (const [i, row] of arr.entries()) {
+    for (const [j, tile] of row.entries()) {
+      const siblings = findSiblings(arr, i, j)
+      const liveCount = siblings.map(i => i.classList.contains('live')).length
+      
+      if (liveCount > 3 || liveCount < 2) {
+        tile.classList.remove('live')
+
+      } else if (liveCount === 3 && !tile.classList.contains('live')) {
+        tile.classList.add('live')
+      }
+    }
+  }
+}
+
+
+function killRandom(arr) {
+
+  for (const [i, row] of arr.entries()) {
+    for (const [j, tile] of row.entries()) {
+      const r = Math.floor(Math.random()*arr[0].length)
+      if (i === r || j === r) {
+        tile.classList.add('live')
+      }
+    }
+  }
+}
+
+killRandom(tiles)
+
+const button = document.createElement('button')
+button.textContent = "click"
+button.addEventListener('click', () => {
+  checkTiles(tiles)
+})
+
+document.body.appendChild(button)
+
+
+// two or three live neighbors lives
+// more than three live dies
+// fewer than two live neighbors dies
+
+
+// dead cell with three live neighbors becomes a live cell
+
+
 
 
 
