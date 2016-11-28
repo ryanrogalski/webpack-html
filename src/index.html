@@ -3,150 +3,308 @@
 <head>
   <title></title>
 </head>
+<script
+  src="https://code.jquery.com/jquery-3.1.1.min.js"
+  integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+  crossorigin="anonymous"></script>
+
 <style type="text/css">
-  * {
-    box-sizing: border-box;
-  }
-  .board {
-    margin: auto;
-    width: 200px;
-  }
+body {
+    background: #000;
+}
 
-  .tile {
+#map {
+  width: 350px;
+  margin: auto;
+}
+
+.mapRow {
+    height: 66px;
+    margin: 0 auto;
+}
+
+.mapColumn {
+    border: 1px solid #666;
+    border-radius: 30px;
+    width: 60px;
+    height: 60px;
+    margin-right: 6px;
+    margin-bottom: 6px;
     float: left;
-    width: 20px;
-    height: 20px;
-    background: #FEB1B4;
-    border: 1px solid white;
-  }
+    color: #000;
+    font-weight: bold;
+    text-align: center;
+    padding-top: 18px;
+}
 
-  .tile.live {
-    background: #8F8AFF;
-  }
+.start {
+    background: #00FFAA;
+}
+
+.end {
+    background: #00AAFF;
+}
+
+.wall {
+    background: #333;
+}
+
+.path {
+    background: #FFFC00;
+    border: 1px solid #FFFC00;
+    -webkit-transition-property: transform, border;
+    -webkit-transition-timing-function: cubic-bezier(0,0,0,1);
+    -webkit-transition-duration: 250ms;
+}
+
+.animate {
+    -webkit-transform: scale(1.25);
+}
+
 
 </style>
 <body>
-<div class="board"></div>
+<div class="ui container" style="margin: 2em 0 4em 0;">
+    <h1 class="ui dividing inverted header" style="position: relative; padding-bottom: .5em;">
+        Snapchat Interview Battle
+    </h1>
+    <div id="map"></div>
+</div>
 </body>
 <script type="text/javascript">
 
 
-function makeBoard(rows, cols) {
+var map = [
+  [1, 5, 0, 0, 0, ],
+  [0, 5, 0, 5, 5, ],
+  [0, 5, 0, 0, 0, ],
+  [0, 5, 0, 5, 0, ],
+  [0, 0, 0, 5, 9, ],
+];
 
-  const board = document.querySelector('.board')
-  const tiles = []
+function run() {
+  // Create the map
+  createMap();
 
-  for (var i = 0; i < rows; i++) {
-    const row = document.createElement('div');
-    row.classList.add('row')
+  // Get the path
+  var path = getPath();
 
-    for (let j = 0; j < cols; j++) {
-      const tile = document.createElement('div')
-      tile.classList.add('tile')
-      row.appendChild(tile)
-    }
-
-    tiles.push(row)
-  }
-
-  for (const i of tiles) {
-    board.appendChild(i)
-  }
+  // Highlight the path
+  highlightPath(path);
 }
 
-makeBoard(10, 10)
+function buildGraph(arr, r, c) {
+  const out = []
 
-function getTiles() {
-  const len = document.querySelector('.row').childNodes.length
-  const tiles = [...document.querySelectorAll('.tile')]
-  const rows = [...document.querySelectorAll('.row')]
-  const array = []
+  const len = arr[0].length
 
-  for (const row of rows){
-    const a = []
+  let top, bottom, left, right; 
 
-    for (const t of row.childNodes){
-      a.push(t)
-    }
-
-    array.push(a)
+  if (r - 1 > 0) {
+    top = arr[r-1][c]
   }
 
-  return array
-}
+  if (r + 1 >= arr[0].length){
+    bottom = arr[r + 1]
+  }
 
-const tiles = getTiles()
-
-function findSiblings(arr, r, c) {
-  const out =[]
-
-  for (const [i, row] of arr.entries()) {
-    for (const [j, tile] of row.entries()) {
-      
-      if (i === r - 1 && j === c - 1 ) out.push(tile)        
-      if (i === r - 1 && j === c) out.push(tile)      
-      if (i === r - 1 && j === c + 1 ) out.push(tile)      
-
-      if (i === r && j === c - 1 ) out.push(tile)        
-      if (i === r && j === c + 1) out.push(tile)
-      
-      if (i === r + 1 && j === c - 1 ) out.push(tile)        
-      if (i === r + 1 && j === c) out.push(tile)      
-      if (i === r + 1 && j === c + 1 ) out.push(tile)      
+  console.log(cur);
   
-    }
-  }
-
   return out
 }
 
+function getPath(arr) {
+  // Write the code to get the path
+  const path = [];
 
-function checkTiles(arr) {
-  for (const [i, row] of arr.entries()) {
-    for (const [j, tile] of row.entries()) {
-      const siblings = findSiblings(arr, i, j)
-      const liveCount = siblings.map(i => i.classList.contains('live')).length
+  const row = arr[0]
+  const col = arr[1]
+
+  const siblings = buildGraph(map, row, col)
+  
+  for (i of siblings){
+    console.log(i);
+  }
+
+
+  return path;
+
+  // return [
+  //     // row, column
+  //     [ 0, 0, ],
+  //     [ 1, 0, ],
+  //     [ 2, 0, ],
+  //     [ 3, 0, ],
+  //     [ 4, 0, ],
+  //     [ 4, 1, ],
+  //     [ 4, 2, ],
+  //     [ 3, 2, ],
+  //     [ 2, 2, ],
+  //     [ 2, 3, ],
+  //     [ 2, 4, ],
+  //     [ 3, 4, ],
+  //     [ 4, 4, ],
+  // ];
+}
+
+getPath([0,0])
+
+
+
+
+function createMap() {
+  // Make the rows
+  for (var rowIndex = 0; rowIndex < map.length; rowIndex++) {
+    var currentRow = map[rowIndex];
+    var currentRowDiv = $('<div id="row' + rowIndex + '" class="mapRow"></div>');
+
+    // Make the columns
+    for (var columnIndex = 0; columnIndex < currentRow.length; columnIndex++) {
+      var currentColumn = currentRow[columnIndex];
+      var currentColumnDiv = $('<div id="row' + rowIndex + 'column' + columnIndex + '" class="mapColumn"></div>');
+
+      if (currentColumn == 1) {
+        currentColumnDiv.addClass('start');
+      } else if (currentColumn == 5) {
+        currentColumnDiv.addClass('wall');
+      } else if (currentColumn == 9) {
+        currentColumnDiv.addClass('end');
+      }
+
+      currentRowDiv.append(currentColumnDiv);
+    }
+
+    $('#map').append(currentRowDiv);
+  }
+}
+
+function highlightPath(path) {
+  for (var i = 0; i < path.length; i++) {
+    highlightPathNode(path[i][0], path[i][1], i);
+  }
+}
+
+function highlightPathNode(rowIndex, columnIndex, pathIndex) {
+  setTimeout(function() {
+    $('#row' + rowIndex + 'column' + columnIndex).html(pathIndex).addClass('path').addClass('animate');
+  }, pathIndex * 100);
+
+  setTimeout(function() {
+    $('#row' + rowIndex + 'column' + columnIndex).removeClass('animate');
+  }, (pathIndex * 100) + 250);
+}
+
+run();
+
+// function makeBoard(rows, cols) {
+
+//   const board = document.querySelector('.board')
+//   const tiles = []
+
+//   for (var i = 0; i < rows; i++) {
+//     const row = document.createElement('div');
+//     row.classList.add('row')
+
+//     for (let j = 0; j < cols; j++) {
+//       const tile = document.createElement('div')
+//       tile.classList.add('tile')
+//       row.appendChild(tile)
+//     }
+
+//     tiles.push(row)
+//   }
+
+//   for (const i of tiles) {
+//     board.appendChild(i)
+//   }
+// }
+
+// makeBoard(10, 10)
+
+// function getTiles() {
+//   const len = document.querySelector('.row').childNodes.length
+//   const tiles = [...document.querySelectorAll('.tile')]
+//   const rows = [...document.querySelectorAll('.row')]
+//   const array = []
+
+//   for (const row of rows){
+//     const a = []
+
+//     for (const t of row.childNodes){
+//       a.push(t)
+//     }
+
+//     array.push(a)
+//   }
+
+//   return array
+// }
+
+// const tiles = getTiles()
+
+// function findSiblings(arr, r, c) {
+//   const out =[]
+
+//   for (const [i, row] of arr.entries()) {
+//     for (const [j, tile] of row.entries()) {
       
-      if (liveCount > 3 || liveCount < 2) {
-        tile.classList.remove('live')
+//       if (i === r - 1 && j === c - 1 ) out.push(tile)        
+//       if (i === r - 1 && j === c) out.push(tile)      
+//       if (i === r - 1 && j === c + 1 ) out.push(tile)      
 
-      } else if (liveCount === 3 && !tile.classList.contains('live')) {
-        tile.classList.add('live')
-      }
-    }
-  }
-}
+//       if (i === r && j === c - 1 ) out.push(tile)        
+//       if (i === r && j === c + 1) out.push(tile)
+      
+//       if (i === r + 1 && j === c - 1 ) out.push(tile)        
+//       if (i === r + 1 && j === c) out.push(tile)      
+//       if (i === r + 1 && j === c + 1 ) out.push(tile)      
+  
+//     }
+//   }
 
-
-function killRandom(arr) {
-
-  for (const [i, row] of arr.entries()) {
-    for (const [j, tile] of row.entries()) {
-      const r = Math.floor(Math.random()*arr[0].length)
-      if (i === r || j === r) {
-        tile.classList.add('live')
-      }
-    }
-  }
-}
-
-killRandom(tiles)
-
-const button = document.createElement('button')
-button.textContent = "click"
-button.addEventListener('click', () => {
-  checkTiles(tiles)
-})
-
-document.body.appendChild(button)
+//   return out
+// }
 
 
-// two or three live neighbors lives
-// more than three live dies
-// fewer than two live neighbors dies
+// function checkTiles(arr) {
+//   for (const [i, row] of arr.entries()) {
+//     for (const [j, tile] of row.entries()) {
+//       const siblings = findSiblings(arr, i, j)
+//       const liveCount = siblings.map(i => i.classList.contains('live')).length
+      
+//       if (liveCount > 3 || liveCount < 2) {
+//         tile.classList.remove('live')
+
+//       } else if (liveCount === 3 && !tile.classList.contains('live')) {
+//         tile.classList.add('live')
+//       }
+//     }
+//   }
+// }
 
 
-// dead cell with three live neighbors becomes a live cell
+// function killRandom(arr) {
+
+//   for (const [i, row] of arr.entries()) {
+//     for (const [j, tile] of row.entries()) {
+//       const r = Math.floor(Math.random()*arr[0].length)
+//       if (i === r || j === r) {
+//         tile.classList.add('live')
+//       }
+//     }
+//   }
+// }
+
+// killRandom(tiles)
+
+// const button = document.createElement('button')
+// button.textContent = "click"
+// button.addEventListener('click', () => {
+//   checkTiles(tiles)
+// })
+
+// document.body.appendChild(button)
+
 
 
 
