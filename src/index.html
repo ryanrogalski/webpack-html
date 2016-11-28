@@ -101,14 +101,35 @@ function buildGraph(arr, r, c) {
   let top, bottom, left, right; 
 
   if (r - 1 > 0) {
-    top = arr[r-1][c]
+    top = [arr[r-1][c],r,c]
+
   }
 
-  if (r + 1 >= arr[0].length){
-    bottom = arr[r + 1]
+  if (r + 1 > 0){
+    bottom = [arr[r + 1][c],r,c]
   }
 
-  console.log(cur);
+  if (c - 1 > 0){
+    left = [arr[r][c - 1],r,c]
+  }
+
+  if (c + 1 > 0){
+    left = [arr[r][c + 1],r,c]
+  }
+
+  const res = {
+    top,
+    right,
+    left, 
+    bottom
+  }
+
+  for (i in res){
+    const item = res[i]
+    if (item === 0){
+      out.push([item)
+    }
+  }
   
   return out
 }
