@@ -7,21 +7,34 @@
   * {
     box-sizing: border-box;
   }
+  
   .board {
     margin: auto;
-    width: 200px;
+  }
+  
+  .row {
+    display: block;
+    width: 80vw;
+    text-align: center;
   }
 
   .tile {
-    float: left;
-    width: 20px;
-    height: 20px;
+    display: inline-block;;
+    width: calc(80vw / 30);
+    height: calc(80vw / 30);
     background: #FEB1B4;
     border: 1px solid white;
+    margin: 0 0 -2px;
   }
 
   .tile.live {
     background: #8F8AFF;
+  }
+
+  button {
+    position: fixed;
+    top: 10px;
+    right: 10px;
   }
 
 </style>
@@ -54,7 +67,7 @@ function makeBoard(rows, cols) {
   }
 }
 
-makeBoard(10, 10)
+makeBoard(20, 20)
 
 function getTiles() {
   const len = document.querySelector('.row').childNodes.length
@@ -104,14 +117,24 @@ function findSiblings(arr, r, c) {
 function checkTiles(arr) {
   for (const [i, row] of arr.entries()) {
     for (const [j, tile] of row.entries()) {
+
       const siblings = findSiblings(arr, i, j)
       const liveCount = siblings.map(i => i.classList.contains('live')).length
-      
-      if (liveCount > 3 || liveCount < 2) {
-        tile.classList.remove('live')
 
-      } else if (liveCount === 3 && !tile.classList.contains('live')) {
-        tile.classList.add('live')
+      // live tiles 
+      if (tile.classList.contains('live')) {
+        if (liveCount === 2 || liveCount === 3){
+          // console.log('tile lives', tile);
+        } else if (liveCount > 3 || liveCount < 2) {
+          // console.log('tile dies', tile);
+          tile.classList.remove('live')
+        }
+        // dead tiles
+      } else {  
+        if (liveCount === 3) {
+          // console.log('dead resurrected', tile);
+          tile.classList.add('live')
+        }
       }
     }
   }
@@ -141,12 +164,11 @@ button.addEventListener('click', () => {
 document.body.appendChild(button)
 
 
-// two or three live neighbors lives
-// more than three live dies
-// fewer than two live neighbors dies
+// two or three live neighbors LIVES
 
+// more than three or fewer than two DIES
 
-// dead cell with three live neighbors becomes a live cell
+// dead cell with three live neighbors becomes LIVES
 
 
 
