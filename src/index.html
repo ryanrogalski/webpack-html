@@ -98,14 +98,28 @@ function run() {
 class GetPath {
   constructor() {
     this.path = []
+    this.wrong =[]
+    this.similar = []
     this.findRows(0, 0)
   }
 
   findRows(row, col) {
     if (map[row][col] === 9) {
+      this.done = true
       this.path.push([row, col])
+      for (let i=0; i<this.path.length; i++){
+        for (let j=0; j<this.wrong.length; j++){
+          if (this.path[i] === this.wrong[j]) {
+            this.similar.push(i)
+          }
+        }
+      }
+
+      this.path.splice(this.similar[0], this.similar.length)
+
       console.log(`maze solved at position [${row}, ${col}]`);
       console.log(this.path);
+      return this.path
     } else if (map[row][col] <= 1) {
       let top = null;
       let right = null;
@@ -160,13 +174,16 @@ class GetPath {
         const side = sides[key]
 
         if (side !== null) {
-
           if (side.val === 9 || side.val === 0) {
             this.path.push([row, col])
             map[row][col] = 2
             this.findRows(side.row, side.col)
-          } else if (side.val === 2) {   
-            this.findRows(side.row, side.col)
+          } else if (side.val === 2 && !this.done) {   
+            for (const i of this.path){
+              if (i[0] === row && i[1] === col) {
+                this.wrong.push(i)
+              }
+            }
           }
         }
       }
