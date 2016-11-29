@@ -8,6 +8,44 @@
 <script type="text/javascript">
 
 
+const msg = 'i have your dog'
+const news = 'i havezasd your dog'
+
+function isZero(n) {
+  return n === 0
+}
+
+function buildMsg(msg, news) {
+  let hash = {}
+  const out = []
+  const stripped = msg.split(' ').join('')
+  const newsStrip = news.split(' ').join('')
+  
+  for (const i of stripped){
+    if (!hash[i]) {
+      hash[i] = 1
+    } else {
+      hash[i]++
+    }
+  }
+
+  for (let i=0; i<newsStrip.length; i++){
+    const ch = newsStrip[i]
+
+    if (ch in hash && hash[ch] !== 0){
+      hash[ch]--
+    }
+  }
+
+  for (const i in hash){
+    out.push(hash[i]);
+  }
+
+  return out.every(isZero)
+}
+
+
+console.log(buildMsg(msg, news));
 
 </script>
 </html>
