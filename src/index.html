@@ -87,90 +87,92 @@ function run() {
   createMap();
 
   // Get the path
-  var path = getPath();
+  const path = new GetPath();
 
   // Highlight the path
-  highlightPath(path);
+  highlightPath(path.path);
 }
 
-function buildGraph(arr, r, c) {
-  const out = []
 
-  const len = arr[0].length
 
-  let top, bottom, left, right; 
-
-  if (r - 1 > 0) {
-    top = [arr[r-1][c],r,c]
-
+class GetPath {
+  constructor() {
+    this.path = []
+    this.findRows(0, 0)
   }
 
-  if (r + 1 > 0){
-    bottom = [arr[r + 1][c],r,c]
-  }
+  findRows(row, col) {
+    if (map[row][col] === 9) {
+      this.path.push([row, col])
+      console.log(`maze solved at position [${row}, ${col}]`);
+      console.log(this.path);
+    } else if (map[row][col] <= 1) {
+      let top = null;
+      let right = null;
+      let bottom = null;
+      let left = null;
 
-  if (c - 1 > 0){
-    left = [arr[r][c - 1],r,c]
-  }
+      // check top
+      if (map[row - 1] !== undefined) {
+        top = {
+          val: map[row - 1][col],
+          row: row - 1,
+          col: col
+        }
+      }
 
-  if (c + 1 > 0){
-    left = [arr[r][c + 1],r,c]
-  }
+      // check right 
+      if (map[row][col + 1] !== undefined) {
+        // console.log('right', row, col);
+        right = {
+          val: map[row][col + 1],
+          row: row,
+          col: col + 1
+        }
+      }
 
-  const res = {
-    top,
-    right,
-    left, 
-    bottom
-  }
+      // check bottom 
+      if (map[row + 1] !== undefined) {
+        bottom = {
+          val: map[row + 1][col],
+          row: row + 1,
+          col: col
+        }
+      }
 
-  for (i in res){
-    const item = res[i]
-    if (item === 0){
-      out.push([item)
+      // check left 
+      if (map[row][col - 1] !== undefined) {
+        left = {
+          val: map[row][col - 1],
+          row: row,
+          col: col - 1
+        }
+      }
+
+      const sides = {
+        top,
+        right,
+        bottom,
+        left,
+      }
+
+      for (const key in sides) {
+        const side = sides[key]
+
+        if (side !== null) {
+
+          if (side.val === 9 || side.val === 0) {
+            this.path.push([row, col])
+            map[row][col] = 2
+            this.findRows(side.row, side.col)
+          } else if (side.val === 2) {   
+            this.findRows(side.row, side.col)
+          }
+        }
+      }
     }
   }
-  
-  return out
 }
-
-function getPath(arr) {
-  // Write the code to get the path
-  const path = [];
-
-  const row = arr[0]
-  const col = arr[1]
-
-  const siblings = buildGraph(map, row, col)
-  
-  for (i of siblings){
-    console.log(i);
-  }
-
-
-  return path;
-
-  // return [
-  //     // row, column
-  //     [ 0, 0, ],
-  //     [ 1, 0, ],
-  //     [ 2, 0, ],
-  //     [ 3, 0, ],
-  //     [ 4, 0, ],
-  //     [ 4, 1, ],
-  //     [ 4, 2, ],
-  //     [ 3, 2, ],
-  //     [ 2, 2, ],
-  //     [ 2, 3, ],
-  //     [ 2, 4, ],
-  //     [ 3, 4, ],
-  //     [ 4, 4, ],
-  // ];
-}
-
-getPath([0,0])
-
-
 
 
 function createMap() {
@@ -216,119 +218,6 @@ function highlightPathNode(rowIndex, columnIndex, pathIndex) {
 }
 
 run();
-
-// function makeBoard(rows, cols) {
-
-//   const board = document.querySelector('.board')
-//   const tiles = []
-
-//   for (var i = 0; i < rows; i++) {
-//     const row = document.createElement('div');
-//     row.classList.add('row')
-
-//     for (let j = 0; j < cols; j++) {
-//       const tile = document.createElement('div')
-//       tile.classList.add('tile')
-//       row.appendChild(tile)
-//     }
-
-//     tiles.push(row)
-//   }
-
-//   for (const i of tiles) {
-//     board.appendChild(i)
-//   }
-// }
-
-// makeBoard(10, 10)
-
-// function getTiles() {
-//   const len = document.querySelector('.row').childNodes.length
-//   const tiles = [...document.querySelectorAll('.tile')]
-//   const rows = [...document.querySelectorAll('.row')]
-//   const array = []
-
-//   for (const row of rows){
-//     const a = []
-
-//     for (const t of row.childNodes){
-//       a.push(t)
-//     }
-
-//     array.push(a)
-//   }
-
-//   return array
-// }
-
-// const tiles = getTiles()
-
-// function findSiblings(arr, r, c) {
-//   const out =[]
-
-//   for (const [i, row] of arr.entries()) {
-//     for (const [j, tile] of row.entries()) {
-      
-//       if (i === r - 1 && j === c - 1 ) out.push(tile)        
-//       if (i === r - 1 && j === c) out.push(tile)      
-//       if (i === r - 1 && j === c + 1 ) out.push(tile)      
-
-//       if (i === r && j === c - 1 ) out.push(tile)        
-//       if (i === r && j === c + 1) out.push(tile)
-      
-//       if (i === r + 1 && j === c - 1 ) out.push(tile)        
-//       if (i === r + 1 && j === c) out.push(tile)      
-//       if (i === r + 1 && j === c + 1 ) out.push(tile)      
-  
-//     }
-//   }
-
-//   return out
-// }
-
-
-// function checkTiles(arr) {
-//   for (const [i, row] of arr.entries()) {
-//     for (const [j, tile] of row.entries()) {
-//       const siblings = findSiblings(arr, i, j)
-//       const liveCount = siblings.map(i => i.classList.contains('live')).length
-      
-//       if (liveCount > 3 || liveCount < 2) {
-//         tile.classList.remove('live')
-
-//       } else if (liveCount === 3 && !tile.classList.contains('live')) {
-//         tile.classList.add('live')
-//       }
-//     }
-//   }
-// }
-
-
-// function killRandom(arr) {
-
-//   for (const [i, row] of arr.entries()) {
-//     for (const [j, tile] of row.entries()) {
-//       const r = Math.floor(Math.random()*arr[0].length)
-//       if (i === r || j === r) {
-//         tile.classList.add('live')
-//       }
-//     }
-//   }
-// }
-
-// killRandom(tiles)
-
-// const button = document.createElement('button')
-// button.textContent = "click"
-// button.addEventListener('click', () => {
-//   checkTiles(tiles)
-// })
-
-// document.body.appendChild(button)
-
-
-
-
 
 
 </script>
