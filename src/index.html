@@ -14,14 +14,14 @@
   
   .row {
     display: block;
-    width: 80vw;
     text-align: center;
+    height: calc(800px / 40);
   }
 
   .tile {
     display: inline-block;;
-    width: calc(80vw / 30);
-    height: calc(80vw / 30);
+    width: calc(800px / 40);
+    height: calc(800px / 40);
     background: #CFD6E6;
     border: 1px solid white;
     margin: 0 0 -2px;
@@ -68,54 +68,85 @@ function makeBoard(rows, cols) {
   }
 }
 
-makeBoard(20, 20)
+makeBoard(40, 40)
 
 function getTiles() {
+  console.log('getTiles');
   const len = document.querySelector('.row').childNodes.length
   const tiles = [...document.querySelectorAll('.tile')]
   const rows = [...document.querySelectorAll('.row')]
-  const array = []
+  const result = []
 
   for (const row of rows){
-    const a = []
+    const rowArr = []
 
-    for (const t of row.childNodes){
-      a.push(t)
+    for (const tile of row.childNodes){
+      rowArr.push(tile)
     }
 
-    array.push(a)
+    result.push(rowArr)
   }
 
-  return array
+  return result
 }
 
-const tiles = getTiles()
+function findSiblings(arr, i, j) {
+  const len = arr[0].length
+  const siblings = []
 
-function findSiblings(arr, r, c) {
-  const out =[]
+  // top left
+  if (i - 1 >= 0 && j - 1 >= 0) {
+    siblings.push(arr[i - 1][j - 1])
+  }
 
-  for (const [i, row] of arr.entries()) {
-    for (const [j, tile] of row.entries()) {
-      
-      if (i === r - 1 && j === c - 1 ) out.push(tile)        
-      if (i === r - 1 && j === c) out.push(tile)      
-      if (i === r - 1 && j === c + 1 ) out.push(tile)      
+  // top middle 
+  if (i - 1 >= 0) {
+    siblings.push(arr[i - 1][j])
+  }
 
-      if (i === r && j === c - 1 ) out.push(tile)        
-      if (i === r && j === c + 1) out.push(tile)
-      
-      if (i === r + 1 && j === c - 1 ) out.push(tile)        
-      if (i === r + 1 && j === c) out.push(tile)      
-      if (i === r + 1 && j === c + 1 ) out.push(tile)      
+  // top right 
+  if (i - 1 >= 0 && j + 1 < len) {
+    siblings.push(arr[i - 1][j + 1])
+  }
+
+  // middle left
+  if (j - 1 >= 0) {
+    siblings.push(arr[i][j - 1])
+  }
+
+  // middle right 
+  if (j + 1 < len) {
+    siblings.push(arr[i][j + 1])
+  }
+
+  // bottom left 
+  if (i + 1 < len && j - 1 >= 0) {
+    siblings.push(arr[i + 1][j - 1])
+  }
+
+  // bottom middle 
+  if (i + 1 < len) {
+    siblings.push(arr[i + 1][j])
+  }
+
+  // bottom right 
+  if (i + 1 < len && j + 1 < len) {
+    siblings.push(arr[i + 1][j + 1])
+  }
+
+  return siblings
+}
+
+
+function runGame() {
+  const arr = getTiles()
+  const liveTiles = document.querySelectorAll('.live').length
   
-    }
-  }
+  if (liveTiles === 0) {
+    console.log('game over');
+    return false
+  } 
 
-  return out
-}
-
-
-function checkTiles(arr) {
   for (const [i, row] of arr.entries()) {
     for (const [j, tile] of row.entries()) {
 
@@ -128,15 +159,12 @@ function checkTiles(arr) {
         if (liveCount === 2 || liveCount === 3){
           // live cell has two or three live 
           // neighbors, it continues living
-          console.log('continues living', tile);
+          // console.log('continues living');
         } else if (liveCount > 3 || liveCount < 2) {
           // live cell has less than two, or more 
           // than three live neighbors, it dies
           tile.classList.remove('live')
-        } else {
-          tile
-        }
-      
+        }       
       // dead tiles
       } else {  
         if (liveCount === 3) {
@@ -149,13 +177,8 @@ function checkTiles(arr) {
   }
 }
 
-
-
-
-
-
-
-function killRandom(arr) {
+function killRandom() {
+  const arr = getTiles()
 
   for (const [i, row] of arr.entries()) {
     for (const [j, tile] of row.entries()) {
@@ -167,12 +190,14 @@ function killRandom(arr) {
   }
 }
 
-killRandom(tiles)
+killRandom()
+killRandom()
+killRandom()
 
 const button = document.createElement('button')
 button.textContent = "click"
 button.addEventListener('click', () => {
-  checkTiles(tiles)
+  runGame()
 })
 
 document.body.appendChild(button)
