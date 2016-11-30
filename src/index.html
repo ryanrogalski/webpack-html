@@ -20,8 +20,8 @@
 
   .tile {
     display: inline-block;;
-    width: calc(800px / 80);
-    height: calc(800px / 80);
+    width: calc(600px / 60);
+    height: calc(600px / 60);
     background: #CFD6E6;
     border: 1px solid white;
     margin: 0 0 -2px;
@@ -36,11 +36,10 @@
     position: fixed;
     top: 10px;
     right: 10px;
-    width: 80px;
     display: block;
     background: whitesmoke;
     border: 1px solid #ddd;
-    padding: 10px;
+    padding: 6px 10px;
     margin: 0 0 10px;
     cursor: pointer;
   }
@@ -81,7 +80,7 @@ function makeBoard(rows, cols) {
   }
 }
 
-makeBoard(80, 80)
+makeBoard(60, 60)
 
 function getTiles() {
   const len = document.querySelector('.row').childNodes.length
