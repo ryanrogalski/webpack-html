@@ -15,13 +15,13 @@
   .row {
     display: block;
     text-align: center;
-    height: calc(800px / 40);
+    height: calc(800px / 80);
   }
 
   .tile {
     display: inline-block;;
-    width: calc(800px / 40);
-    height: calc(800px / 40);
+    width: calc(800px / 80);
+    height: calc(800px / 80);
     background: #CFD6E6;
     border: 1px solid white;
     margin: 0 0 -2px;
@@ -32,18 +32,31 @@
     background: #658FFF;
   }
 
-  button {
+  .btn {
     position: fixed;
     top: 10px;
     right: 10px;
+    width: 80px;
+    display: block;
+    background: whitesmoke;
+    border: 1px solid #ddd;
+    padding: 10px;
+    margin: 0 0 10px;
+    cursor: pointer;
+  }
+
+  .btn:focus,
+  .btn:active {
+    outline: 0;
   }
 
 </style>
 <body>
-<div class="board"></div>
+  <button class="btn">Start</button>
+  <div class="board"></div>>
 </body>
-<script type="text/javascript">
 
+<script type="text/javascript">
 
 function makeBoard(rows, cols) {
 
@@ -68,10 +81,9 @@ function makeBoard(rows, cols) {
   }
 }
 
-makeBoard(40, 40)
+makeBoard(80, 80)
 
 function getTiles() {
-  console.log('getTiles');
   const len = document.querySelector('.row').childNodes.length
   const tiles = [...document.querySelectorAll('.tile')]
   const rows = [...document.querySelectorAll('.row')]
@@ -177,7 +189,13 @@ function runGame() {
   }
 }
 
+
+const randomCount = 5
+let count = 0
+
 function killRandom() {
+  if (count === randomCount) return false
+
   const arr = getTiles()
 
   for (const [i, row] of arr.entries()) {
@@ -188,23 +206,32 @@ function killRandom() {
       }
     }
   }
+  count++
+  killRandom()
 }
 
 killRandom()
-killRandom()
-killRandom()
 
-const button = document.createElement('button')
-button.textContent = "click"
+const button = document.querySelector('.btn');
+
+let interval = null
+
+function startGame() {
+  interval = setInterval(() => runGame(), 200)
+  button.classList.add('playing')
+  button.textContent = 'Stop'
+}
+
+function stopGame() {
+  clearInterval(interval)
+  interval = null
+  button.classList.remove('playing')
+  button.textContent = 'Start'
+}
+
 button.addEventListener('click', () => {
-  runGame()
+  button.classList.contains('playing') ? stopGame() : startGame()
 })
-
-document.body.appendChild(button)
-
-
-
-
 
 
 </script>
