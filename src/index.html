@@ -22,13 +22,14 @@
     display: inline-block;;
     width: calc(80vw / 30);
     height: calc(80vw / 30);
-    background: #FEB1B4;
+    background: #CFD6E6;
     border: 1px solid white;
     margin: 0 0 -2px;
+    transition: background .2s ease-in-out;
   }
 
   .tile.live {
-    background: #8F8AFF;
+    background: #658FFF;
   }
 
   button {
@@ -119,26 +120,39 @@ function checkTiles(arr) {
     for (const [j, tile] of row.entries()) {
 
       const siblings = findSiblings(arr, i, j)
-      const liveCount = siblings.map(i => i.classList.contains('live')).length
+      const liveCount = siblings.filter(i => i.classList.contains('live')).length
 
       // live tiles 
       if (tile.classList.contains('live')) {
+        
         if (liveCount === 2 || liveCount === 3){
-          // console.log('tile lives', tile);
+          // live cell has two or three live 
+          // neighbors, it continues living
+          console.log('continues living', tile);
         } else if (liveCount > 3 || liveCount < 2) {
-          // console.log('tile dies', tile);
+          // live cell has less than two, or more 
+          // than three live neighbors, it dies
           tile.classList.remove('live')
+        } else {
+          tile
         }
-        // dead tiles
+      
+      // dead tiles
       } else {  
         if (liveCount === 3) {
-          // console.log('dead resurrected', tile);
+          // dead cell has exactly three 
+          // live neighbors, it comes to life
           tile.classList.add('live')
         }
       }
     }
   }
 }
+
+
+
+
+
 
 
 function killRandom(arr) {
@@ -163,12 +177,6 @@ button.addEventListener('click', () => {
 
 document.body.appendChild(button)
 
-
-// two or three live neighbors LIVES
-
-// more than three or fewer than two DIES
-
-// dead cell with three live neighbors becomes LIVES
 
 
 
