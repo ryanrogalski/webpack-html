@@ -67,7 +67,7 @@ function makeBoard(rows, cols) {
     const row = document.createElement('div');
     row.classList.add('row')
 
-    for (let j = 0; j < cols; j++) {
+    for (var j = 0; j < cols; j++) {
       const cell = document.createElement('div')
       cell.classList.add('cell')
       row.appendChild(cell)
@@ -76,7 +76,7 @@ function makeBoard(rows, cols) {
     cells.push(row)
   }
 
-  for (const i of cells) {
+  for (var i of cells) {
     board.appendChild(i)
   }
 
@@ -84,15 +84,15 @@ function makeBoard(rows, cols) {
 }
 
 const randomCount = 3
-let count = 0
+var count = 0
 
 function configBoard() {
   if (count === randomCount) return false
 
-  const arr = getcells()
+  const arr = getCells()
 
-  for (const [i, row] of arr.entries()) {
-    for (const [j, cell] of row.entries()) {
+  for (var [i, row] of arr.entries()) {
+    for (var [j, cell] of row.entries()) {
       const r = Math.floor(Math.random()*arr[0].length)
       if (i === r || j === r) {
         cell.classList.add('live')
@@ -103,15 +103,18 @@ function configBoard() {
   configBoard()
 }
 
-function getcells() {
-  const cells = [...document.querySelectorAll('.cell')]
-  const rows = [...document.querySelectorAll('.row')]
+function getCells() {
+  const c = document.querySelectorAll('.cell')
+  const r = document.querySelectorAll('.row')
+  const cells = Array.from(c)
+  const rows = Array.from(r)
   const result = []
 
-  for (const row of rows){
+  for (var row of rows){
     const rowArr = []
+    const children = Array.from(row.childNodes)
 
-    for (const cell of row.childNodes){
+    for (var cell of children){
       rowArr.push(cell)
     }
 
@@ -154,7 +157,7 @@ function findSiblings(arr, i, j) {
 
 
 function runGame() {
-  const arr = getcells()
+  const arr = getCells()
   const livecells = document.querySelectorAll('.live').length
   
   if (livecells === 0) {
@@ -162,11 +165,13 @@ function runGame() {
     return false
   } 
 
-  for (const [i, row] of arr.entries()) {
-    for (const [j, cell] of row.entries()) {
+  for (var [i, row] of arr.entries()) {
+    for (var [j, cell] of row.entries()) {
 
       const siblings = findSiblings(arr, i, j)
-      const liveCount = siblings.filter(i => i.classList.contains('live')).length
+      const liveCount = siblings.filter(function(i) {
+        return i.classList.contains('live')
+      }).length
 
       // live cells 
       if (cell.classList.contains('live')) {   
@@ -191,10 +196,12 @@ function runGame() {
 }
 
 const button = document.querySelector('.btn');
-let interval = null
+var interval = null
 
 function startGame() {
-  interval = setInterval(() => runGame(), 200)
+  interval = setInterval(function(){
+    runGame()
+  }, 200)
   button.classList.add('playing')
   button.textContent = 'Stop'
 }
@@ -210,7 +217,7 @@ function stopGame() {
 makeBoard(60, 60)
 
 // setup start button
-button.addEventListener('click', () => {
+button.addEventListener('click', function() {
   button.classList.contains('playing') ? stopGame() : startGame()
 })
 
