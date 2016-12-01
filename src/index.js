@@ -1,13 +1,6 @@
 require('./style.css')
 require('./index.html')
 
-const RGB2Color = (r, g, b) => `#${byte2Hex(r)}${byte2Hex(g)}${byte2Hex(b)}`;
-
-const byte2Hex = (n) => {
-  var nybHexString = "0123456789ABCDEF";
-  return String(nybHexString.substr((n >> 4) & 0x0F, 1)) + nybHexString.substr(n & 0x0F, 1);
-}
-
 const getRandom = (min, max) => {
   return Math.floor(Math.random() * (max - min + 1)) + min
 }
@@ -21,21 +14,26 @@ const getDirection = () => {
   return arr[getRandom(0, 1)]
 }
 
-const rgb = (str) => str.match(/\w\w/g).map(b => parseInt(b, 16));
+const rgbArray = (str) => {
+  const res = str
+    .substring(4, str.length-1)
+    .replace(/ /g, '')
+    .split(',')
+    .map(i => Number(i))
 
-const randomColor = () => Math.floor(Math.random() * 16777215).toString(16);
+  return res
+}
 
-const avgColor = (a, b) => {
-  const color = []
-
-  for (var i = 0; i < 3; i++) color[i] = a[i] + Math.random() * (b[i] - a[i]) | 0;
-
-  const res = color
-    .map(n => n.toString(16))
-    .map(s => "00".slice(s.length) + s)
-    .join('')
-
-  return res;
+const avgColor = (rgb) => {
+  const out = []
+  
+  for (const i of rgb){
+    const dif = 255 - i
+    const r = 255 - Math.floor(Math.random() * dif)
+    out.push(r)
+  }
+  
+  return `rgb(${out[0]},${out[1]},${out[2]})`
 }
 
 class Ghost {
@@ -115,13 +113,13 @@ class GhostCloud {
   buildColorBar(frequency, phase1, phase2, phase3, center=128, width=127, len=50) {
 
     for (let i = 0; i < len; i++) {
-      const red = Math.sin(frequency * i + phase1) * width + center;
-      const grn = Math.sin(frequency * i + phase2) * width + center;
-      const blu = Math.sin(frequency * i + phase3) * width + center;
+      const red = Math.floor(Math.sin(frequency * i + phase1) * width + center);
+      const grn = Math.floor(Math.sin(frequency * i + phase2) * width + center);
+      const blu = Math.floor(Math.sin(frequency * i + phase3) * width + center);
 
       const colorBlock = document.createElement('div')
       colorBlock.classList.add('color-block')
-      const bg = RGB2Color(red, grn, blu)
+      const bg = `rgb(${red}, ${grn}, ${blu})`
       colorBlock.setAttribute('color', bg)
 
       colorBlock.style.borderColor = bg
@@ -220,9 +218,8 @@ class GhostCloud {
 
     for (let i = 0; i < cloudSize; i++) {
 
-      const base = rgb('#ffffff')
-      const cur = rgb(`#${this.color}`)
-      const color = avgColor(base, cur)
+      const rgb = rgbArray(this.color)
+      const color = avgColor(rgb)
 
       const g = new Ghost(
         getRandom(this.size - 20, this.size + 20),
@@ -281,3 +278,7 @@ class GhostCloud {
 }
 
 new GhostCloud()
+
+
+
+
