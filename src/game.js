@@ -1,10 +1,8 @@
 class GameOfLife {
   constructor(){
     this.board = document.querySelector('.board')
-    this.fps = 6
+    this.fps = 1000
     this.interval = 1000 / this.fps
-    this.randomCount = 4
-    this.count = 0
     this.animation = null 
     this.then = 0
     this.makeBoard(100, 100)
@@ -30,25 +28,30 @@ class GameOfLife {
   }
 
   configBoard() {
-    if (this.count === this.randomCount) {
-      this.setupEvents()
-      return false
-    }
-
     const arr = this.getCells()
-    for (var [i, row] of arr.entries()) {
-      for (var [j, cell] of row.entries()) {
-        const r = Math.floor(Math.random() * arr[0].length)
-        if (i === r || j === r) {
-          cell.classList.add('live')
-        }
-      }
-    }
-    this.count++
-    this.configBoard()
+    const r = 10 + Math.floor(Math.random()*80)
+
+    const cells = [
+      arr[r-1][r-1],
+      arr[r-1][r],
+      arr[r-1][r+1],
+
+      arr[r][r-1],
+      arr[r][r+1],
+
+      arr[r+1][r-1],
+      arr[r+1][r],
+      arr[r+1][r+1],
+    ]
+
+    cells.forEach(i => i.classList.add('live'))
+
+    this.setupEvents()
   }
 
   setupEvents() {
+    this.board = document.querySelector('.board');
+
     this.board.addEventListener('click', () => {
       const playing = this.board.classList.contains('playing')
       if (playing) {
@@ -57,7 +60,6 @@ class GameOfLife {
         this.startGame()
       }
     })
-    this.startGame()
   }
 
   getCells() {
@@ -109,7 +111,7 @@ class GameOfLife {
     const livecells = document.querySelectorAll('.live').length
 
     if (livecells === 0) {
-      console.log('game over');
+      this.stopGame()
       return false
     }
 

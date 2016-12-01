@@ -19,9 +19,23 @@
   height: 1vw;
   background: #E8E8E8;
   border: 1px solid white;
-  transition: background .2s ease-in-out;
+  transition: background .4s ease-in-out;
 }
 
 .cell.live {
   background: #658FFF;
+}
+
+button {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  padding: 6px 10px;
+  margin: 10px;
+  background: whitesmoke;
+  border: 1px solid #ddd;
+}
+
+button:active {
+  outline: 0;
 }
