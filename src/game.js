@@ -31,7 +31,7 @@ class GameOfLife {
 
   configBoard() {
     if (this.count === this.randomCount) {
-      this.runGame()
+      this.setupEvents()
       return false
     }
 
@@ -46,6 +46,18 @@ class GameOfLife {
     }
     this.count++
     this.configBoard()
+  }
+
+  setupEvents() {
+    this.board.addEventListener('click', () => {
+      const playing = this.board.classList.contains('playing')
+      if (playing) {
+        this.stopGame()
+      } else {
+        this.startGame()
+      }
+    })
+    this.startGame()
   }
 
   getCells() {
