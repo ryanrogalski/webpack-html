@@ -1,8 +1,4 @@
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
+* { box-sizing: border-box;}
 
 .board {
   margin: auto;
@@ -14,14 +10,14 @@
   display: block;
   margin: auto;
   text-align: center;
+  height: 1vw;
 }
 
 .cell {
-  display: block;
-  float: left;
-  width: calc(100vw / 100);
-  height: calc(100vw / 100);
-  background: #DFDFE0;
+  display: inline-block;
+  width: 1vw;
+  height: 1vw;
+  background: #E8E8E8;
   border: 1px solid white;
   transition: background .2s ease-in-out;
 }
