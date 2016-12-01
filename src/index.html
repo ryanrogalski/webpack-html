@@ -9,43 +9,39 @@
 
 
 const msg = 'i have your dog'
-const news = 'i havezasd your dog'
-
-function isZero(n) {
-  return n === 0
-}
+const news = 'iyourhaveasdfasdfdoggasd'
 
 function buildMsg(msg, news) {
-  let hash = {}
-  const out = []
-  const stripped = msg.split(' ').join('')
+  const chars = {}
+  const msgStrip = msg.split(' ').join('')
   const newsStrip = news.split(' ').join('')
-  
-  for (const i of stripped){
-    if (!hash[i]) {
-      hash[i] = 1
+
+  for (i of msgStrip){
+    if (!chars[i]){
+      chars[i] = 1
     } else {
-      hash[i]++
+      chars[i]++
     }
   }
 
-  for (let i=0; i<newsStrip.length; i++){
-    const ch = newsStrip[i]
-
-    if (ch in hash && hash[ch] !== 0){
-      hash[ch]--
+  for (i of newsStrip){
+    if(chars[i]){
+      chars[i]--
     }
   }
 
-  for (const i in hash){
-    out.push(hash[i]);
+  for (i in chars){
+    if (chars[i] !== 0) {
+      return false
+    }
   }
 
-  return out.every(isZero)
+  return true
 }
 
 
-console.log(buildMsg(msg, news));
+const res = buildMsg(msg, news)
+console.log(res);
 
 </script>
 </html>
