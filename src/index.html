@@ -34,7 +34,7 @@ function makeBoard(rows, cols) {
   configBoard()
 }
 
-const randomCount = 3
+const randomCount = 6
 var count = 0
 
 function configBoard() {
@@ -106,6 +106,7 @@ function findSiblings(arr, i, j) {
   return siblings
 }
 
+var animation = null
 
 function runGame() {
   const arr = getCells()
@@ -144,20 +145,17 @@ function runGame() {
       }
     }
   }
+  animation = requestAnimationFrame(runGame)
 }
 
-var interval = null
-
 function startGame() {
-  interval = setInterval(function(){
-    runGame()
-  }, 200)
+  runGame()
   board.classList.add('playing')
 }
 
 function stopGame() {
-  clearInterval(interval)
-  interval = null
+  cancelAnimationFrame(animation)
+  animation = null
   board.classList.remove('playing')
 }
 
@@ -170,6 +168,8 @@ const board = document.querySelector('.board');
 board.addEventListener('click', function() {
   board.classList.contains('playing') ? stopGame() : startGame()
 })
+
+startGame()
 
 
 </script>

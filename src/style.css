@@ -20,7 +20,7 @@
   display: block;
   float: left;
   width: calc(100vw / 100);
-  height: calc(100vh / 100);
+  height: calc(100vw / 100);
   background: #DFDFE0;
   border: 1px solid white;
   transition: background .2s ease-in-out;
