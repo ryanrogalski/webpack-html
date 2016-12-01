@@ -3,57 +3,8 @@
 <head>
   <title></title>
 </head>
-<style type="text/css">
-  * {
-    box-sizing: border-box;
-  }
-  
-  .board {
-    margin: auto;
-  }
-  
-  .row {
-    display: block;
-    margin: auto;
-    text-align: center;
-    width: 80vw;
-  }
-
-  .cell {
-    display: block;
-    float: left;
-    width: calc(80vw / 60);
-    height: calc(80vw / 60);
-    background: #DFDFE0;
-    border: 1px solid white;
-    transition: background .2s ease-in-out;
-  }
-
-  .cell.live {
-    background: #658FFF;
-  }
-
-  .btn {
-    position: fixed;
-    top: 10px;
-    right: 10px;
-    display: block;
-    background: whitesmoke;
-    border: 1px solid #ddd;
-    padding: 6px 10px;
-    margin: 0 0 10px;
-    cursor: pointer;
-  }
-
-  .btn:focus,
-  .btn:active {
-    outline: 0;
-  }
-
-</style>
 <body>
-  <button class="btn">Start</button>
-  <div class="board"></div>
+<div class="board"></div>
 </body>
 
 <script type="text/javascript">
@@ -195,30 +146,29 @@ function runGame() {
   }
 }
 
-const button = document.querySelector('.btn');
 var interval = null
 
 function startGame() {
   interval = setInterval(function(){
     runGame()
   }, 200)
-  button.classList.add('playing')
-  button.textContent = 'Stop'
+  board.classList.add('playing')
 }
 
 function stopGame() {
   clearInterval(interval)
   interval = null
-  button.classList.remove('playing')
-  button.textContent = 'Start'
+  board.classList.remove('playing')
 }
 
 // build & configure board
-makeBoard(60, 60)
+makeBoard(100, 100)
 
 // setup start button
-button.addEventListener('click', function() {
-  button.classList.contains('playing') ? stopGame() : startGame()
+const board = document.querySelector('.board');
+
+board.addEventListener('click', function() {
+  board.classList.contains('playing') ? stopGame() : startGame()
 })
 
 

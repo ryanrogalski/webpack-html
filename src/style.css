@@ -1,0 +1,31 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+.board {
+  margin: auto;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.row {
+  display: block;
+  margin: auto;
+  text-align: center;
+}
+
+.cell {
+  display: block;
+  float: left;
+  width: calc(100vw / 100);
+  height: calc(100vh / 100);
+  background: #DFDFE0;
+  border: 1px solid white;
+  transition: background .2s ease-in-out;
+}
+
+.cell.live {
+  background: #658FFF;
+}
