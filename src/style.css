@@ -1,7 +1,9 @@
-* { box-sizing: border-box;}
+* { 
+  box-sizing: border-box;
+}
 
 canvas {
-  margin: 10% auto;
+  margin: auto;
   display: block;
   border: 1px solid #ddd;
 }
