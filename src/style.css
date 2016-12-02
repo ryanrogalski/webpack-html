@@ -38,7 +38,27 @@ canvas {
   cursor: crosshair;
 }
 
-.ghost-wrap {
+.logo-wrap {
   display: none;
 }
 
+
+.link {
+  position: fixed;
+  right: 10px;
+  bottom: 10px;
+  font-size: 12px;
+  color: #A9A9A9;
+  letter-spacing: 0.05em;
+}
+
+.link.hint {
+  left: 10px;
+  bottom: 10px;
+}
+
+.link a {
+  text-decoration: none;
+  color: #7C7C7C;
+  font-weight: bold;
+}

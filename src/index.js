@@ -29,14 +29,14 @@ const avgColor = (rgb) => {
   
   for (const i of rgb){
     const dif = 255 - i
-    const r = 255 - Math.floor(Math.random() * dif)
+    const r = 255 - dif - Math.floor(Math.random() * dif)
     out.push(r)
   }
   
   return `rgb(${out[0]},${out[1]},${out[2]})`
 }
 
-class Ghost {
+class Logo {
   constructor(size, img, x, y) {
     const spread = size * getRandomDec(.2, 1.2)
     this.alpha = 0
@@ -94,7 +94,7 @@ class GhostCloud {
     this.paint = false
     this.ghostArray = []
 
-    this.svg = document.querySelector('.ghost')
+    this.svg = document.querySelector('.logo')
 
     this.colorWrap = document.querySelector('.color-wrap')
 
@@ -102,7 +102,7 @@ class GhostCloud {
     this.ctx = this.canvas.getContext('2d')
 
     this.canvasSize = this.canvasSize.bind(this)
-    this.pushGhost = this.pushGhost.bind(this)
+    this.pushLogo = this.pushLogo.bind(this)
 
     this.bindEvents()
     this.buildColorBar(.1,0,2,4,200,50)
@@ -165,16 +165,16 @@ class GhostCloud {
 
     this.canvas.addEventListener('mousedown', (e) => {
       this.paint = true;
-      this.pushGhost(e)
-      this.cycle = setInterval(() => this.pushGhost(e), 100)
+      this.pushLogo(e)
+      this.cycle = setInterval(() => this.pushLogo(e), 100)
     })
 
     this.canvas.addEventListener('mousemove', (e) => {
       this.clearCycle()
 
       if (this.paint) {
-        this.pushGhost(e)
-        this.cycle = setInterval(() => this.pushGhost(e), 100)
+        this.pushLogo(e)
+        this.cycle = setInterval(() => this.pushLogo(e), 100)
       }
     })
 
@@ -213,7 +213,7 @@ class GhostCloud {
     this.cycle = null
   }
 
-  pushGhost(e) {
+  pushLogo(e) {
     const cloudSize = Math.floor(getRandom(50, 150) / this.size)
 
     for (let i = 0; i < cloudSize; i++) {
@@ -221,7 +221,7 @@ class GhostCloud {
       const rgb = rgbArray(this.color)
       const color = avgColor(rgb)
 
-      const g = new Ghost(
+      const g = new Logo(
         getRandom(this.size - 20, this.size + 20),
         this.createImg(color),
         this.getMousePos(e).x,
