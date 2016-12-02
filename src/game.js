@@ -148,7 +148,6 @@ class GameOfLife {
   }
 
   runGame(ts) {
-    let elapsed = ts - this.then
     const kill = []
     const born = []
 
@@ -159,7 +158,8 @@ class GameOfLife {
       this.stopGame()
       return false
     }
-
+    
+    let elapsed = ts - this.then
     if (elapsed > this.interval) {
       this.then = ts - (elapsed % this.interval)
 
@@ -171,8 +171,6 @@ class GameOfLife {
             }).length
             // live cells
           if (cell.classList.contains('live')) {
-            // if a live cell has two or three live
-            // neighbors, it continues living
             // if live cell has less than two, or more
             // than three live neighbors, it dies
             if (liveCount > 3 || liveCount < 2) {
