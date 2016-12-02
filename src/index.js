@@ -2,7 +2,7 @@ require('./style.css')
 require('./index.html')
 
 
-class Point {
+class Logo {
   constructor(size, img, x, y){
     this.size = size;
     this.img = img;
@@ -11,14 +11,18 @@ class Point {
   }
 }
 
-class GhostDraw {
+class LogoDraw {
   constructor() {
-    this.svg = document.querySelector('.ghost')
+    this.svg = document.querySelector('.logo')
     this.reset = document.querySelector('.clear-btn')
     this.undo = document.querySelector('.undo-btn')
+
     this.sizeSlider = document.querySelector('.slider')
+    this.size = window.innerWidth / 20
+    this.sizeSlider.value = this.size
+
     this.colorSlider = document.querySelector('.jscolor')
-    this.size = window.innerWidth / 20;
+    this.colorSlider.value = '#000000'
     this.color = this.colorSlider.value;
     this.coords = []
 
@@ -31,7 +35,7 @@ class GhostDraw {
 
     this.bindEvents()
     this.canvasSize()
-    this.sizingGhosts()
+    this.sizingLogos()
   }
 
   bindEvents() {    
@@ -69,9 +73,9 @@ class GhostDraw {
     })
   }
 
-  sizingGhosts() {
-    const sm = document.querySelector('.ghost-sm')
-    const lg = document.querySelector('.ghost-lg')
+  sizingLogos() {
+    const sm = document.querySelector('.logo-sm')
+    const lg = document.querySelector('.logo-lg')
     const xml = (new XMLSerializer).serializeToString(this.svg)
 
     const img = new Image()
@@ -82,7 +86,7 @@ class GhostDraw {
   }
 
   pushPoint(e) {
-    const p = new Point(this.size, this.createImg(this.colorSlider.value), this.getMousePos(e).x, this.getMousePos(e).y)
+    const p = new Logo(this.size, this.createImg(this.colorSlider.value), this.getMousePos(e).x, this.getMousePos(e).y)
     this.coords.push(p)
     this.draw()
   }
@@ -114,8 +118,8 @@ class GhostDraw {
   resetCanvas() {
     this.coords.length = []
     this.paint = false;
-    this.colorSlider.value = '#ffffff' 
-    this.colorSlider.style = '' 
+    this.colorSlider.style = ''
+    this.colorSlider.value = '#000000' 
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
   }
 
@@ -149,4 +153,4 @@ class GhostDraw {
   }
 }
 
-new GhostDraw()
+new LogoDraw()

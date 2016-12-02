@@ -70,16 +70,33 @@ label {
   color: #7B7B7B;
 }
 
-.ghost-wrap {
+.logo-wrap {
   display: none;
 }
 
-.ghost-sm img {
+.logo-sm img {
   width: 20px;
   position: relative;
   top: -3px;
 }
 
-.ghost-lg img {
+.logo-lg img {
   width: 30px;
+}
+
+
+.link {
+  position: fixed;
+  right: 10px;
+  bottom: 10px;
+  font-size: 12px;
+  font-weight: 100;
+  color: #A9A9A9;
+  letter-spacing: 0.05em;
+}
+
+.link a {
+  text-decoration: none;
+  color: #7C7C7C;
+  font-weight: bold;
 }
