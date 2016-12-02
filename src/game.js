@@ -1,4 +1,4 @@
-const glider = [
+const grid = [
   [1, 5],
   [1, 6],
   [2, 5],
@@ -34,7 +34,20 @@ const glider = [
   [35, 3],
   [35, 4],
   [36, 3],
-  [36, 4]
+  [36, 4],
+  // // Random cells
+  [60, 47],
+  [61, 47],
+  [62, 47],
+  [60, 48],
+  [61, 48],
+  [62, 48],
+  [60, 49],
+  [61, 49],
+  [62, 49],
+  [60, 51],
+  [61, 51],
+  [62, 51],
 ]
 
 class GameOfLife {
@@ -69,7 +82,7 @@ class GameOfLife {
   configBoard() {
     const arr = this.getCells()
     
-    glider.forEach(i => {
+    grid.forEach(i => {
       const x = i[1]
       const y = i[0]
       arr[x][y].classList.add('live')
@@ -136,6 +149,8 @@ class GameOfLife {
 
   runGame(ts) {
     let elapsed = ts - this.then
+    const kill = []
+    const born = []
 
     const arr = this.getCells()
     const livecells = document.querySelectorAll('.live').length
@@ -161,19 +176,22 @@ class GameOfLife {
             // if live cell has less than two, or more
             // than three live neighbors, it dies
             if (liveCount > 3 || liveCount < 2) {
-              cell.classList.remove('live')
+              kill.push(cell)
             }
             // dead cells
           } else {
             if (liveCount === 3) {
               // if dead cell has exactly three
               // live neighbors, it comes to life
-              cell.classList.add('live')
+              born.push(cell)
             }
           }
         }
       }    
     }
+
+    kill.forEach(i => i.classList.remove('live'))
+    born.forEach(i => i.classList.add('live'))
 
     this.animation = requestAnimationFrame((ts) => this.runGame(ts))
   }

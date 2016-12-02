@@ -19,7 +19,7 @@
   height: 1vw;
   background: #E8E8E8;
   border: 1px solid white;
-  transition: background .4s ease-in-out;
+  transition: background .1s ease-in-out;
 }
 
 .cell.live {
