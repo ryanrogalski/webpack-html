@@ -15,5 +15,8 @@
     "raw-loader": "^0.5.1",
     "webpack": "^1.12.13",
     "webpack-dev-server": "^1.14.1"
+  },
+  "dependencies": {
+    "normalize.css": "^5.0.0"
   }
 }
