@@ -1,0 +1,15 @@
+header {
+  background: #eee;
+  border-bottom: 1px solid #ccc;
+  padding: 20px;
+  color: #666;
+  img {
+    vertical-align: bottom;
+    margin-right: 20px; 
+  }
+}
+
+section {
+  color: #666;
+  padding: 20px;
+}
