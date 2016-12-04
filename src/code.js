@@ -123,63 +123,47 @@ class Game {
   }
 
   getNeighbors(arr, x, y) {
-    const len = arr[0].length - 1
-    const out = []
+    let count = 0
+
+    const checkArr = (x, y) => arr[x] && arr[x][y]
 
     // top left
-    if (x > 0 && y > 0) {
-      out.push(arr[x - 1][y - 1])
-    }
+    if (checkArr(x - 1, y - 1)) count++
 
     // top mid
-    if (x > 0) {
-      out.push(arr[x - 1][y])
-    }
+    if (checkArr(x - 1, y)) count++
 
     // top right
-    if (x > 0 && y < len) {
-      out.push(arr[x - 1][y + 1])
-    }
+    if (checkArr(x - 1, y + 1)) count++
 
     // mid left
-    if (y > 0) {
-      out.push(arr[x][y - 1])
-    }
+    if (checkArr(x, y - 1)) count++
 
     // mid right
-    if (y < len) {
-      out.push(arr[x][y + 1])
-    }
+    if (checkArr(x, y + 1)) count++
 
     // bottom left
-    if (x < len && y > 0) {
-      out.push(arr[x + 1][y - 1])
-    }
+    if (checkArr(x + 1, y - 1)) count++
 
     // bottom mid
-    if (x < len) {
-      out.push(arr[x + 1][y])
-    }
+    if (checkArr(x + 1, y)) count++
 
     // bottom right
-    if (x < len && y < len) {
-      out.push(arr[x + 1][y + 1])
-    }
+    if (checkArr(x + 1, y + 1)) count++
 
-    return out.filter(i => i === 1).length
+    return count
   }
 
   updateGrid() {
-    const grid = this.grid.slice()
 
-    const updated = grid.map((row, x) => {
+    const updated = this.grid.map((row, x) => {      
       return row.map((cell, y) => {
-
-        const n = this.getNeighbors(grid, x, y)
-
+        
+        const n = this.getNeighbors(this.grid, x, y)        
+        
         // live cell
         if (cell === 1) {
-          return (n === 2 || n === 3) ? 0 : 1
+          return (n === 2 || n === 3) ? 1 : 0
         // dead cell
         } else {
           return (n === 3) ? 1 : 0
@@ -188,12 +172,8 @@ class Game {
     })
 
     this.grid = updated 
-    const count = updated.map(row => {
-      return row.filter(i => i===1)
-    })
 
-    console.log(count);
-    // setTimeout(() => this.drawGrid(), 200)
+    requestAnimationFrame(() => this.drawGrid())
   }
 
   drawGrid() {
