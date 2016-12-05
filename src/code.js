@@ -1,102 +1,75 @@
-const seed = [
-  [1, 5],
-  [1, 6],
-  [2, 5],
-  [2, 6],
-  [11, 5],
-  [11, 6],
-  [11, 7],
-  [12, 4],
-  [12, 8],
-  [13, 3],
-  [13, 9],
-  [14, 3],
-  [14, 9],
-  [15, 6],
-  [16, 4],
-  [16, 8],
-  [17, 5],
-  [17, 6],
-  [17, 7],
-  [18, 6],
-  [21, 3],
-  [21, 4],
-  [21, 5],
-  [22, 3],
-  [22, 4],
-  [22, 5],
-  [23, 2],
-  [23, 6],
-  [25, 1],
-  [25, 2],
-  [25, 6],
-  [25, 7],
-  [35, 3],
-  [35, 4],
-  [36, 3],
-  [36, 4],
-
-  [60, 47],
-  [61, 47],
-  [62, 47],
-  [60, 48],
-  [61, 48],
-  [62, 48],
-  [60, 49],
-  [61, 49],
-  [62, 49],
-  [60, 51],
-  [61, 51],
-  [62, 51],
-
-  [60, 67],
-  [61, 67],
-  [62, 67],
-  [60, 68],
-  [61, 68],
-  [62, 68],
-  [60, 69],
-  [61, 69],
-  [62, 69],
-  [60, 71],
-  [61, 71],
-  [62, 71],
-
-  [80, 67],
-  [81, 67],
-  [82, 67],
-  [80, 68],
-  [81, 68],
-  [82, 68],
-  [80, 69],
-  [81, 69],
-  [82, 69],
-  [80, 71],
-  [81, 71],
-  [82, 71],
-]
-
 class Game {
   constructor(n=10){
     this.canvas = document.querySelector('canvas')
     this.ctx = this.canvas.getContext('2d')
     this.size = this.canvas.width / n
     this.n = n
+    this.playing = false
     this.buildGrid(n)
     this.setupEvents()    
     this.sizeCanvas()
   }
 
   setupEvents(){
+    const start = document.createElement('button')
+    start.classList.add('btn-start', 'btn')
+    start.textContent = ' ▶'
+    document.body.appendChild(start)
+    start.addEventListener('click', () => this.handleStart())
+    this.start = start
+
+    this.canvas.addEventListener('mouseup', (e) => this.handleUp(e))
+    this.canvas.addEventListener('mousedown', (e) => this.handleDown(e))
+
+    this.canvas.addEventListener('mousemove', (e) => this.dragCell(e))
+    this.canvas.addEventListener('click', (e) => this.clickCell(e))
     window.addEventListener('resize', () => this.sizeCanvas())
   }
 
+  handleStart(){
+    this.playing ? this.stopGame() : this.startGame()       
+  }
+
+  handleDown(e) { this.dragging = true }
+
+  handleUp(e) { this.dragging = false }
+
+  clickCell(e) {
+    this.stopGame()
+    const pos = this.getMousePos(e)  
+    this.fillCell(pos)
+  }
+
+  dragCell(e) {
+    if (this.dragging) this.stopGame()
+    if (!this.dragging) return false
+    const pos = this.getMousePos(e)  
+    this.fillCell(pos)
+    // setTimeout(() => this.fillCell(pos), 100)
+  }
+
+  fillCell(pos){
+    const x = Math.floor(pos.x / this.size)
+    const y = Math.floor(pos.y / this.size)
+
+    this.grid[x][y] = this.grid[x][y] == 1 ? 0 : 1 
+    this.draw()
+  }
+
+  getMousePos(e) {
+    const rect = this.canvas.getBoundingClientRect();
+    return {
+      x: e.clientX - rect.left,
+      y: e.clientY - rect.top
+    }
+  }
+
   sizeCanvas(){
-    const width = window.innerWidth * .75
+    const width = window.innerWidth
     this.canvas.width = width
     this.canvas.height = width
     this.size = width / this.n
-    this.drawGrid()
+    this.draw()
   }
 
   buildGrid(n) {
@@ -111,7 +84,7 @@ class Game {
     }
     
     this.grid = arr
-    this.seedGrid(seed)
+    // this.seedGrid(seed)
   }
 
   seedGrid(seed) {
@@ -173,10 +146,11 @@ class Game {
 
     this.grid = updated 
 
-    requestAnimationFrame(() => this.drawGrid())
+    this.raf = requestAnimationFrame(() => this.draw())
   }
 
-  drawGrid() {
+  draw() {
+
     const ctx = this.ctx
     const size = this.size
     const grid = this.grid.slice()
@@ -198,7 +172,23 @@ class Game {
       })
     })
 
-    this.updateGrid()
+    if (this.playing) this.updateGrid()
+  }
+
+  startGame() {
+    this.start.textContent = '◼'
+
+    this.playing = true
+    this.draw()
+  }
+
+  stopGame() {
+    this.start.textContent = '▶'
+    this.playing = false
+
+    cancelAnimationFrame(this.raf)
+    this.raf = null
+
   }
 }
 

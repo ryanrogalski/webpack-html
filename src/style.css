@@ -1,3 +1,19 @@
 * {
   box-sizing: border-box;
+  font-family: avenir;
+}
+
+.btn {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: whitesmoke;
+  border: 1px solid #ddd;
+  text-transform: uppercase;
+  vertical-align: middle;
+  cursor: pointer;
+  outline: 0 !important;
+  font-size: 20px;
+  padding: 8px 11px 5px 14px;
+  width: 60px;
 }
