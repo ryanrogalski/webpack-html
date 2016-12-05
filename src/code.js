@@ -88,7 +88,8 @@ class Game {
     this.n = n
     this.playing = false
     this.buildColors(.1,0,2,4,200,50)
-    this.buildGrid(n)
+    this.buildGrid()
+    this.seedGrid()
     this.setupEvents()    
     this.sizeCanvas()
   }
@@ -111,11 +112,12 @@ class Game {
     return this.colors[r]
   }
 
-  buildGrid(n) {
+  buildGrid() {    
     const arr = []
-    for (let i = 0; i < n; i++) {
+
+    for (let i = 0; i < this.n; i++) {
       arr[i] = []
-      for (let j = 0; j < n; j++) {
+      for (let j = 0; j < this.n; j++) {
         
         const cell = {
           color: this.colors[j],
@@ -126,11 +128,11 @@ class Game {
       }
     }
     
-    this.grid = arr
-    this.seedGrid(seed)
+    this.grid = arr  
+    this.draw()
   }
 
-  seedGrid(seed) {
+  seedGrid() {    
     seed.forEach(i => {
       const x = i[0]
       const y = i[1]
@@ -143,35 +145,48 @@ class Game {
       this.grid[this.n - x][y] = cell
       this.grid[this.n - x][this.n - y] = cell
     })
+    
+    this.draw()
   }
 
   setupEvents(){
-    const start = document.createElement('button')
-    start.classList.add('btn-start', 'btn')
-    start.textContent = ' ▶'
-    document.body.appendChild(start)
-    start.addEventListener('click', () => this.handleStart())
-    this.start = start
+    this.start = document.querySelector('.btn-start')
+    this.start.addEventListener('click', () => this.handleStart())
+
+    this.reset = document.querySelector('.btn-reset')
+    this.reset.addEventListener('click', () => this.handleReset())
+
+    this.seed = document.querySelector('.btn-seed')
+    this.seed.addEventListener('click', () => this.seedGrid())
 
     this.canvas.addEventListener('mouseup', (e) => this.handleUp(e))
     this.canvas.addEventListener('mousedown', (e) => this.handleDown(e))
-
     this.canvas.addEventListener('mousemove', (e) => this.dragCell(e))
     this.canvas.addEventListener('click', (e) => this.clickCell(e))
+    
     window.addEventListener('resize', () => this.sizeCanvas())
   }
 
-  handleStart(){
-    this.playing ? this.stopGame() : this.startGame()       
+  handleReset() {
+    this.stopGame()
+    this.buildGrid()
   }
 
-  handleDown(e) { this.dragging = true }
+  handleStart() {
+    this.playing ? this.stopGame() : this.startGame()
+  }
 
-  handleUp(e) { this.dragging = false }
+  handleDown(e) {
+    this.dragging = true
+  }
+
+  handleUp(e) {
+    this.dragging = false
+  }
 
   clickCell(e) {
     this.stopGame()
-    const pos = this.getMousePos(e)  
+    const pos = this.getMousePos(e)
     this.fillCell(pos)
   }
 
@@ -282,7 +297,7 @@ class Game {
   }
 
   draw() {
-    const ctx = this.ctx
+    const ctx = this.ctx 
     const size = this.size
     const grid = this.grid.slice()
 
@@ -297,10 +312,7 @@ class Game {
         if (cell.val === 1) {
           ctx.fillStyle = cell.color
           ctx.fill()
-        } else {
-          // ctx.fillStyle = 'white'
-          // ctx.stroke()
-        }
+        } 
       })
     })
 
@@ -324,7 +336,7 @@ class Game {
   }
 }
 
-new Game(150)
+new Game(160)
 
 
 

@@ -1,23 +1,40 @@
 * {
   box-sizing: border-box;
-  font-family: avenir;
+  background: black;
 }
 
 canvas {
   cursor: crosshair;
+  width: 100vw;
+  height: 100vh;
+}
+
+.btn-group {
+  position: fixed;
+  bottom: 20px;
+  right: 20px; 
 }
 
 .btn {
-  position: fixed;
-  top: 20px;
-  right: 20px;
-  background: whitesmoke;
-  border: 1px solid #ddd;
-  text-transform: uppercase;
+  border-radius: 2px;
+  font-family: avenir;
+  font-weight: 100;
+  background: 0;
+  border: 1px solid #00FF00;
+  color: #00FF00;
   vertical-align: middle;
+  text-align: center;
   cursor: pointer;
   outline: 0 !important;
   font-size: 20px;
-  padding: 8px 11px 5px 14px;
-  width: 60px;
+  margin-left: 10px;
+}
+
+.btn-start {
+  width: 50px;
+  padding: 10px 10px 4px;
+}
+
+.btn-text {
+  padding: 8px 15px 6px;
 }
