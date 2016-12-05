@@ -1,12 +1,35 @@
 * {
   box-sizing: border-box;
+}
+
+body {
   background: black;
+  font-family: avenir;
 }
 
 canvas {
   cursor: crosshair;
   width: 100vw;
   height: 100vh;
+}
+
+.title {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  color: #E3E7E7;
+  text-align: center;
+}
+
+a {
+  color: white;
+  text-decoration: none;
+  transition: all .2s ease-in-out;
+}
+
+a:hover {
+  color: gray;
 }
 
 .btn-group {
@@ -17,9 +40,8 @@ canvas {
 
 .btn {
   border-radius: 2px;
-  font-family: avenir;
   font-weight: 100;
-  background: 0;
+  background: black;
   border: 1px solid #00FF00;
   color: #00FF00;
   vertical-align: middle;
