@@ -4,13 +4,24 @@
 
 body {
   background: black;
-  font-family: avenir;
+  font-family: 'Press Start 2P', avenir;
+  overflow: hidden;
+}
+
+.vc-wrap {
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
 }
 
 canvas {
   cursor: crosshair;
-  width: 100vw;
-  height: 100vh;
+  position: relative;
+  left: -8px;
 }
 
 .title {
@@ -20,6 +31,7 @@ canvas {
   right: 0;
   color: #E3E7E7;
   text-align: center;
+  font-size: 10px;
 }
 
 a {
@@ -35,10 +47,13 @@ a:hover {
 .btn-group {
   position: fixed;
   bottom: 20px;
-  right: 20px; 
+  right: 0;
+  left: 0;
+  text-align: center;
 }
 
 .btn {
+  font-family: 'Press Start 2P', avenir;
   border-radius: 2px;
   font-weight: 100;
   background: black;
@@ -48,15 +63,11 @@ a:hover {
   text-align: center;
   cursor: pointer;
   outline: 0 !important;
-  font-size: 20px;
-  margin-left: 10px;
-}
-
-.btn-start {
-  width: 50px;
-  padding: 10px 10px 4px;
-}
-
-.btn-text {
+  font-size: 10px;
+  margin: 0px;
   padding: 8px 15px 6px;
+}
+
+.hidden {
+  display: none;
 }

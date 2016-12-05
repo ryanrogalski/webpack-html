@@ -86,6 +86,7 @@ class Game {
     this.ctx = this.canvas.getContext('2d')
     this.size = this.canvas.width / n
     this.n = n
+    this.seed = document.querySelector('.btn-seed')
     this.playing = false
     this.buildColors(.1,0,2,4,200,50)
     this.buildGrid()
@@ -146,6 +147,7 @@ class Game {
       this.grid[this.n - x][this.n - y] = cell
     })
     
+    this.seed.classList.add('hidden')
     this.draw()
   }
 
@@ -168,6 +170,7 @@ class Game {
   }
 
   handleReset() {
+    this.seed.classList.remove('hidden')
     this.stopGame()
     this.buildGrid()
   }
@@ -320,14 +323,14 @@ class Game {
   }
 
   startGame() {
-    this.start.textContent = '◼'
+    this.start.textContent = 'Stop'
 
     this.playing = true
     this.draw()
   }
 
   stopGame() {
-    this.start.textContent = '▶'
+    this.start.textContent = 'Start'
     this.playing = false
 
     cancelAnimationFrame(this.raf)
