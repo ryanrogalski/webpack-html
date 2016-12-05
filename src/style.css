@@ -3,6 +3,10 @@
   font-family: avenir;
 }
 
+canvas {
+  cursor: crosshair;
+}
+
 .btn {
   position: fixed;
   top: 20px;
