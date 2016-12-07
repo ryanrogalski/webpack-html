@@ -10,26 +10,32 @@
 function HashTable(){
   var table = []
 
-  var loseloseHashCode = function(key){
-    var hash = 0
+  var code = function(key){
+    var hash = 5381
     for (let i=0; i < key.length; i++){
-      hash += key.charCodeAt(i)
+      hash = hash * 33 + key.charCodeAt(i)
     }
-    return hash % 37
+    return hash % 1013
   }
 
   this.put = function(key, value){
-    var position = loseloseHashCode(key)
+    var position = code(key)
     console.log(`${position}-${key}`);
     table[position] = value
   }
 
   this.get = function(key){
-    return table[loseloseHashCode(key)]
+    return table[code(key)]
   }
 
   this.remove = function(key){
-    table[loseloseHashCode(key)] = undefined
+    table[code(key)] = undefined
+  }
+
+  this.log = function(){
+    for (const i in table){
+      console.log(i, table[i])
+    }
   }
 }
 
