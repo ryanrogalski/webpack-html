@@ -7,135 +7,112 @@
 </body>
 <script type="text/javascript">
 
-function LinkedList() {
-  var Node = function(el) {
-    this.el = el 
-    this.next = null
+function Set() {
+  const items = {}
+
+  this.has = function(value){
+    return items.hasOwnProperty(value)
   }
 
-  var length = 0
-  var head = null
-
-  this.append = function(el) {
-    var node = new Node(el),
-        current
-
-    if (head === null) {
-      head = node
-    } else {
-      current = head 
-
-      while(current.next){
-        current = current.next
-      }
-
-      current.next = node
-    }
-
-    length++
-  }
-
-  this.insert = function(position, el) {
-    // if position exists
-    if (position >= 0 && position <= length) {
-      var node = new Node(el),
-        current = head,
-        previous,
-        index = 0;
-
-      // first position
-      if (position === 0) {
-        node.next = current
-        head = node
-      } else {
-        while (index++ < position) {
-          previous = current
-          current = current.next
-        }
-        node.next = current
-        previous.next = node
-      }
-      length++
+  this.add = function(value){
+    if (!this.has(value)) {
+      items[value] = value
       return true
+    }
+    return false
+  }
 
-    } else {
+  this.remove = function(value){
+    if (this.has(value)){
+      delete items[value]
+      return true
+    }
+    return false
+  }
+
+  this.clear = function(value){
+    items = {}
+  }
+
+  this.size = function(){
+    return Object.keys(items).length
+  }
+
+  this.values = function() {
+    return Object.keys(items)
+  }
+
+  this.combine = function(otherSet){
+    var combineSet = new Set()
+    var values = this.values()
+    for (const i of values){
+      combineSet.add(i)
+    }
+
+    values = otherSet.values()
+    for (const i of values){
+      combineSet.add(i)
+    }
+    return combineSet
+  }
+
+  this.intersect = function(otherSet){
+    var intersectSet = new Set()
+    var values = this.values()
+    for (const i of values){
+      if (otherSet.has(i)) {
+        intersectSet.add(i)
+      }
+    }
+    return intersectSet
+  }
+
+  this.difference = function(otherSet){
+    var differenceSet = new Set()
+    var values = this.values()
+    for (const i of values){
+      if (!otherSet.has(i)) {
+        differenceSet.add(i)
+      }
+    }
+    return differenceSet
+  }
+
+  this.subset = function(otherSet){
+    if (this.size() > otherSet.size()) {
       return false
-    }
-  }
-
-  this.removeAt = function(position) {
-    // check for out of bounds vals
-    if (position >= 0 && position < length) {
-      var current = head,
-        previous,
-        index = 0;
-
-      // remove first item
-      if (position === 0) {
-        head = current.next
-      } else {
-        while (index++ < position) {
-          previous = current
-          current = current.next
-        }
-        // link previous with current's next
-        previous.next = current.next
-      }
-
-      length--
     } else {
-      return null
-    }
-  }
-
-  this.remove = function(el) {
-    var index = this.indexOf(el)
-    return this.removeAt(index)
-  }
-
-  this.indexOf = function(el) {
-    var current = head,
-      index = -1;
-
-    while (current) {
-      if (el === current.el) {
-        return index
+      var values = this.values()
+      for (const i of values) {
+        if (!otherSet.has(i)) {
+          return false
+        }
+        return true
       }
-      index++
-      current = current.next
     }
-    return -1
-  }
-
-  this.isEmpty = function() {
-    return length === 0
-  }
-
-  this.size = function() {
-    return length
-  }
-
-  this.print = function() {
-    var current = head, 
-      string = '';
-
-    while (current) {
-      string += `${current.el}, `
-      current = current.next
-    }
-    return string.slice(0, -2)
-  }
-
-  this.getHead = function() {
-    return head
   }
 }
 
-var list = new LinkedList()
-list.append(15)
-list.append(10)
-list.insert(1, 25)
-list.insert(3, 22)
+var setA = new Set()
+
+setA.add(1)
+setA.add(2)
+
+var setB = new Set()
+
+setB.add(1)
+setB.add(2)
+setB.add(3)
+
+var setC = new Set()
+
+setC.add(2)
+setC.add(3)
+setC.add(4)
+
+
+console.log(setA.subset(setB));
+console.log(setA.subset(setC));
 
 
 </script>
