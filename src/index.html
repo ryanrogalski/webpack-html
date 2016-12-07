@@ -7,37 +7,37 @@
 </body>
 <script type="text/javascript">
 
-const a = 'i have our doga'
-const b = 'i have yur dogssssas'
+function HashTable(){
+  var table = []
 
-function strToArr(str){
-  return str.split(' ').join('').split('').sort()
-}
-
-function ransomNote(a, b) {
-  const msg = strToArr(a)
-  const words = strToArr(b)
-
-  const len = msg.length
-  let count = 0
-
-  for (const [i, ch] of msg.entries()) {
-    if (words.indexOf(ch) !== -1) {
-      count++
-      const index = words.indexOf(ch)
-      words.splice(index, 1)
-    } else {
-      return false
+  var loseloseHashCode = function(key){
+    var hash = 0
+    for (let i=0; i < key.length; i++){
+      hash += key.charCodeAt(i)
     }
+    return hash % 37
   }
-  
-  return (len === count) ? true : false
+
+  this.put = function(key, value){
+    var position = loseloseHashCode(key)
+    console.log(`${position}-${key}`);
+    table[position] = value
+  }
+
+  this.get = function(key){
+    return table[loseloseHashCode(key)]
+  }
+
+  this.remove = function(key){
+    table[loseloseHashCode(key)] = undefined
+  }
 }
 
-console.log(ransomNote(a, b));
+var hash = new HashTable()
 
-
-
+hash.put('Gandalf', 'gandalf@email.com')
+hash.put('John', 'johnsnow@email.com')
+hash.put('Tyrion', 'tyrion@email.com')
 
 
 </script>
