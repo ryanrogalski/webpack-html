@@ -7,44 +7,183 @@
 </body>
 <script type="text/javascript">
 
-function HashTable(){
-  var table = []
+function BinarySearchTree() {
+  function Node(key) {
+    this.key = key
+    this.left = null
+    this.right = null
+  }
 
-  var code = function(key){
-    var hash = 5381
-    for (let i=0; i < key.length; i++){
-      hash = hash * 33 + key.charCodeAt(i)
+  let root = null
+
+  function insertNode(node, newNode) {
+    newNode.key < node.key 
+    ? node.left === null 
+      ? node.left = newNode
+      : insertNode(node.left, newNode)
+    : node.right === null 
+      ? node.right = newNode
+      : insertNode(node.right, newNode)
+  }
+
+  this.insert = function(key) {
+    const newNode = new Node(key)
+
+    root === null 
+      ? root = newNode 
+      : insertNode(root, newNode)
+
+  }
+
+  function inOrderTraverseNode(node, callback) {
+    if (node !== null) {
+      inOrderTraverseNode(node.left, callback)
+      callback(node.key)
+      inOrderTraverseNode(node.right, callback)
     }
-    return hash % 1013
   }
 
-  this.put = function(key, value){
-    var position = code(key)
-    console.log(`${position}-${key}`);
-    table[position] = value
+  this.inOrderTraverse = function(callback) {
+    inOrderTraverseNode(root, callback)
   }
 
-  this.get = function(key){
-    return table[code(key)]
+  function preOrderTraverseNode(node, callback) {
+    if (node !== null) {
+      callback(node.key)
+      preOrderTraverseNode(node.left, callback)
+      preOrderTraverseNode(node.right, callback)
+    }
   }
 
-  this.remove = function(key){
-    table[code(key)] = undefined
+  this.preOrderTraverse = function(callback){
+    preOrderTraverseNode(root, callback)
+  }
+
+  function minNode(node){
+    if (node) {
+      while (node && node.left !== null){
+        node = node.left
+      }
+      return node.key
+    }
+    return null
+  }
+
+  this.min = function() {
+    return minNode(root)
+  }
+
+  function maxNode(node) {
+    if (node) {
+      while (node && node.right !== null){
+        node = node.right
+      }
+      return node.key
+    }
+    return null
+  }
+
+  this.max = function() {
+    return maxNode(root)
+  }
+
+  function searchNode(node, key) {
+    if (node === null) {
+      return false
+    } 
+
+    if (key < node.key) {
+      return searchNode(node.left, key)
+    } else if (key > node.key) {
+      return searchNode(node.right, key)
+    } else {
+      return true
+    }
+  }
+
+  this.search = function(key) {
+    return searchNode(root, key)
+  }
+
+  function findMinNode(node) {
+    if (node) {
+      while (node && node.left !== null) {
+        node = node.left
+      }
+      return node
+    }
+    return null
+  }
+
+  function removeNode(node, key) {
+    if (node === null) {
+      return null
+    }
+
+    if (key < node.key) {
+      node.left = removeNode(node.left, key)
+      return node
+    } else if (key > node.key) {
+      node.right = removeNode(node.right, key)
+      return node
+    } else {
+      // no children, assign to null
+      if (node.left === null && node.right === null) {
+        node = null
+        return node
+      }
+
+      // node with only one child
+      if (node.left === null) {
+        node = node.right
+        return node
+      } else if (node.right === null) {
+        node = node.left 
+        return node
+      }
+
+      // node with 2 children
+      var aux = findMinNode(node.right)
+      node.key = aux.key
+      node.right = removeNode(node.right, aux.key)
+      return node
+    }
+  }
+
+  this.remove = function(key) {
+    root = removeNode(root, key)
+  }
+
+  function logTree(node){
+    console.log(node)
+    if (node !== null) {
+      if (node.left !== null) logTree(node.left)
+      if (node.right !== null) logTree(node.right)      
+    }
   }
 
   this.log = function(){
-    for (const i in table){
-      console.log(i, table[i])
-    }
+    logTree(root)
   }
 }
 
-var hash = new HashTable()
+const b = new BinarySearchTree()
 
-hash.put('Gandalf', 'gandalf@email.com')
-hash.put('John', 'johnsnow@email.com')
-hash.put('Tyrion', 'tyrion@email.com')
+b.insert(11)
+b.insert(7)
+b.insert(15)
+b.insert(5)
+b.insert(3)
+b.insert(9)
+b.insert(8)
+b.insert(10)
+b.insert(13)
+b.insert(12)
+b.insert(14)
+b.insert(20)
+b.insert(18)
+b.insert(25)
 
-
+b.preOrderTraverse(console.log)
 </script>
 </html>
