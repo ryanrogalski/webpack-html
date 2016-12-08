@@ -7,6 +7,30 @@
 </body>
 <script type="text/javascript">
 
+function Queue() {
+  const items = []
+
+  this.enqueue = function(el) {
+    items.push(el)
+  }
+
+  this.dequeue = function() {
+    return items.shift()
+  }
+  this.front = function() {
+    return items[0]
+  }
+  this.isEmpty = function() {
+    return items.length === 0
+  }
+  this.size = function() {
+    return items.length
+  }
+  this.print = function() {
+    console.log(items)
+  }
+}
+
 function Dictionary() {
   var items = {}
 
@@ -59,7 +83,7 @@ function Graph() {
   var vertices = []
   var adjList = new Dictionary()
 
-  this.addVertex = function(v){
+  this.addVertex = function(v) {
     vertices.push(v)
     adjList.set(v, [])
   }
@@ -71,16 +95,61 @@ function Graph() {
 
   this.toString = function() {
     var s = '\n'
-    for (i of vertices){
+    for (i of vertices) {
       s += `${i} -> `
       var neighbors = adjList.get(i)
 
-      for (j of neighbors){
+      for (j of neighbors) {
         s += `${j} `
       }
       s += '\n'
     }
     return s
+  }
+
+  function initializeColor() {
+    var color = []
+    for (i of vertices) {
+      color[i] = 'white'
+    }
+    return color
+  }
+
+  this.bfs = function(v) {
+    var color = initializeColor(),
+      queue = new Queue(),
+      d = [],
+      pred = []
+
+    queue.enqueue(v)
+
+    for (const i of vertices) {
+      d[i] = 0
+      pred[i] = null
+    }
+
+    while (!queue.isEmpty()) {
+      var u = queue.dequeue()
+      var neighbors = adjList.get(u)
+
+      color[u] = 'grey'
+
+      for (w of neighbors) {
+        if (color[w] === 'white') {
+          color[w] = 'grey'
+          d[w] = d[u] + 1
+          pred[w] = u
+          queue.enqueue(w)
+        }
+      }
+
+      color[u] = 'black'
+    }
+
+    return {
+      distances: d,
+      predecessors: pred
+    }
   }
 }
 
@@ -103,6 +172,31 @@ graph.addEdge('D','H')
 graph.addEdge('B','E')
 graph.addEdge('B','F')
 graph.addEdge('E','I')
+
+function printNode(val){
+  console.log(`visited vertex: ${val}`);
+}
+
+const path = graph.bfs(myVertices[0])
+console.log(path);
+
+var fromVertex = myVertices[0]
+
+for (i of myVertices) {
+  var toVertex = myVertices[i],
+      p = new Stack()
+
+  for (var v=toVertex; v!==fromVertex;v=path.predecessors[v]){
+    p.push(v)
+  }
+  p.push(fromVertex)
+  var s = p.pop()
+  while (!p.isEmpty()){
+    s += ` - ${p.pop()}`
+  }
+  console.log(s);
+}
+
 
 </script>
 </html>
