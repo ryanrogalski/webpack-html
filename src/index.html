@@ -6,6 +6,37 @@
 <body>
 </body>
 <script type="text/javascript">
+function Stack() {
+ const items = []
+
+ this.push = function(element) {
+   items.push(element)
+ }
+
+ this.pop = function() {
+   return items.pop()
+ }
+
+ this.peek = function(){
+  return items[items.length-1]
+ }
+
+ this.isEmpty = function(){
+  return items.length == 0
+ }
+
+ this.size = function(){
+  return items.length
+ }
+
+ this.clear = function(){
+  items = []
+ }
+
+ this.print = function(){
+  console.log(items)
+ }
+}
 
 function Queue() {
   const items = []
@@ -156,7 +187,7 @@ function Graph() {
 var graph = new Graph()
 
 var myVertices = ['A','B','C','D','E','F','G','H','I']
-for (i of myVertices){
+for (const i of myVertices){
   graph.addVertex(i)
 }
 
@@ -177,26 +208,26 @@ function printNode(val){
   console.log(`visited vertex: ${val}`);
 }
 
-const path = graph.bfs(myVertices[0])
-console.log(path);
+const shortpath = graph.bfs(myVertices[0])
+console.log(shortpath);
 
 var fromVertex = myVertices[0]
 
-for (i of myVertices) {
-  var toVertex = myVertices[i],
-      p = new Stack()
+for (const i of myVertices) {
+  var path = new Stack()
 
-  for (var v=toVertex; v!==fromVertex;v=path.predecessors[v]){
-    p.push(v)
+  for (var v = i; v !== fromVertex; v = shortpath.predecessors[v]) {
+    path.push(v)
   }
-  p.push(fromVertex)
-  var s = p.pop()
-  while (!p.isEmpty()){
-    s += ` - ${p.pop()}`
+
+  path.push(fromVertex)
+
+  var s = path.pop()
+  while (!path.isEmpty()) {
+    s += ` - ${path.pop()}`
   }
   console.log(s);
 }
-
 
 </script>
 </html>
