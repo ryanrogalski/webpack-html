@@ -2,6 +2,7 @@
 var path = require('path')
 var webpack = require('webpack')
 var HtmlWebpackPlugin = require('html-webpack-plugin')
+var CopyWebpackPlugin = require('copy-webpack-plugin')
 
 module.exports = {
   devtool: 'cheap-eval-source-map',
@@ -18,7 +19,10 @@ module.exports = {
     new webpack.HotModuleReplacementPlugin(),
     new HtmlWebpackPlugin({
       template: './src/index.html'
-    })
+    }),
+    new CopyWebpackPlugin([{
+      from: 'sounds'
+    }])
   ],
   module: {
     loaders: [{
@@ -27,6 +31,9 @@ module.exports = {
     }, {
       test: /\.html$/,
       loader: "raw-loader" // loaders: ['raw-loader'] is also perfectly acceptable.
+    },{
+      test: /\.wav$/,
+      loader: "url-loader"
     }]
   },
   devServer: {
