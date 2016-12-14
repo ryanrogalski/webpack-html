@@ -8,8 +8,8 @@
 <script type="text/javascript">
 
 
-const msg = 'i have your dog'
-const news = 'iyourhaveasdfasdfdoggasd'
+const m = 'i have your dog'
+const n = 'i have your dg'
 
 function buildMsg(msg, news) {
   const chars = {}
@@ -39,9 +39,32 @@ function buildMsg(msg, news) {
   return true
 }
 
+function valid(msg, news) {
+  console.log(msg, news);
+ const checkMsg = [...msg.split(' ').join('')]
+  .reduce((obj, i) => {
+    const newsArr = news.split(' ').join('')
 
-const res = buildMsg(msg, news)
-console.log(res);
+    if (!obj[i]) obj[i] = 0
+    
+    console.log(newsArr, i);
+    if (newsArr.indexOf(i) > -1) {
+      obj[i]++
+    }
+
+    return obj
+  }, {}) 
+
+  console.log(checkMsg);
+
+  for (i in checkMsg){
+    if (checkMsg[i] < 1) console.log('hi');
+  }
+
+  return true  
+}
+
+console.log(valid(m, n));
 
 </script>
 </html>
