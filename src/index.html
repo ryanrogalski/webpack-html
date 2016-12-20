@@ -5,11 +5,12 @@
 </head>
 <body>
 <script>
+
 const Box = x => 
 ({
   map: f => Box(f(x)),
   fold: f => f(x),
-  inspect: () => `Box(${x})`
+  toString: () => `Box(${x})`
 })
 
 const moneyToFloat = str =>
@@ -32,7 +33,8 @@ const applyDiscount = (price, discount) =>
 
 const result = applyDiscount('$5.00', '20%')
 
-console.log(result)
+console.log(String(Box('A')))
+
 </script>
 </body>
 </html>
