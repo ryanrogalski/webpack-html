@@ -315,7 +315,7 @@ class Game {
         if (cell.val === 1) {
           ctx.fillStyle = cell.color
           ctx.fill()
-        } 
+        }   
       })
     })
 
