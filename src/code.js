@@ -305,7 +305,7 @@ class Game {
     const grid = this.grid.slice()
 
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height)    
-    ctx.strokeStyle = "#E5E5E5"
+    ctx.strokeStyle = '#E5E5E5'
     ctx.strokeWidth = 0.5
 
     grid.forEach((row, x) => {
