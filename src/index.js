@@ -1,4 +1,5 @@
 require('./index.html')
+require('./style.css')
 
 
 var map = [
