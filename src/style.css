@@ -10,3 +10,7 @@
   text-transform: uppercase;
   border-radius: 4px;
 }
+
+.btn:focus {
+  outline: 0;
+}

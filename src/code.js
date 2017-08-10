@@ -58,16 +58,12 @@ const kick = (audio) => {
 }
 
 const createTrack = (color, playSound) => {
-  const steps = []
-
-  for (let i=0; i < 16; i++) {
-    steps.push(false)
-  }
+  const steps = Array(16).fill(false)
 
   return {
-    steps: steps,
-    color: color, 
-    playSound: playSound
+    steps,
+    color, 
+    playSound
   }
 }
 
@@ -113,9 +109,7 @@ const data = {
 
 const canvas = document.querySelector('canvas').getContext('2d')
 
-const draw = () => {
-  console.log('draw', playing, data.step);
-  
+const draw = () => {  
   canvas.clearRect(0, 0, canvas.canvas.width, canvas.canvas.height)
   drawTracks(canvas, data)
   drawButton(canvas, data.step, data.tracks.length, 'deeppink')        
@@ -153,7 +147,6 @@ const setupClick = () => {
 const button = document.querySelector('.btn')
 
 let playInt
-
 const startSeq = () => {
   playInt = setInterval(() => {
     data.step = (data.step + 1) % data.tracks[0].steps.length
