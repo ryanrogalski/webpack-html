@@ -1,5 +1,7 @@
 const audio = new AudioContext()
 
+let playing = true
+
 const createSineWave = (audio, duration) => {
   const osc = audio.createOscillator()
 
@@ -112,9 +114,12 @@ const data = {
 const canvas = document.querySelector('canvas').getContext('2d')
 
 const draw = () => {
+  console.log('draw', playing, data.step);
+  
   canvas.clearRect(0, 0, canvas.canvas.width, canvas.canvas.height)
   drawTracks(canvas, data)
-  drawButton(canvas, data.step, data.tracks.length, 'deeppink')
+  drawButton(canvas, data.step, data.tracks.length, 'deeppink')        
+
   requestAnimationFrame(draw)
 }
 
@@ -130,10 +135,10 @@ const isPointInButton = (pos, col, row) => {
 
 const setupClick = () => {
   addEventListener('click', e => {
-    const pos = {
-      x: e.clientX,
-      y: e.clientY
-    }
+    const x = e.clientX
+    const y = e.clientY
+
+    const pos = { x, y }
  
     data.tracks.forEach((track, row) => {
       track.steps.forEach((on, col) => {
@@ -145,13 +150,35 @@ const setupClick = () => {
   })
 }
 
+const button = document.querySelector('.btn')
+
+let playInt
+
+const startSeq = () => {
+  playInt = setInterval(() => {
+    data.step = (data.step + 1) % data.tracks[0].steps.length
+
+    data.tracks
+      .filter(track => track.steps[data.step])
+      .forEach(track => track.playSound())
+  }, 100)  
+}
+
+button.addEventListener('click', e => {
+  if (playing) {
+    playing = false
+    button.innerText = 'play'
+    clearInterval(playInt)
+  } else {
+    playing = true
+    button.innerText = 'pause'
+    data.step = 15    
+    startSeq()
+  }
+})
+
 setupClick()
+startSeq()
 draw()
 
-setInterval(() => {
-  data.step = (data.step + 1) % data.tracks[0].steps.length
 
-  data.tracks
-    .filter(track => track.steps[data.step])
-    .forEach(track => track.playSound())
-}, 100)
