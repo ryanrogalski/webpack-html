@@ -1,29 +1,17 @@
 // webpack.config.dev.js
-var path = require('path')
-var webpack = require('webpack')
-var HtmlWebpackPlugin = require('html-webpack-plugin')
+const path = require('path')
 
 module.exports = {
   devtool: 'cheap-eval-source-map',
-  entry: [
-    'webpack-dev-server/client?http://localhost:8080',
-    'webpack/hot/dev-server',
-    './src/index'
-  ],
+  entry: './src/index',
   output: {
-    path: path.join(__dirname, 'dist'),
-    filename: 'bundle.js'
+    filename: 'bundle.js',
+    path: path.resolve(__dirname, 'dist'),
   },
-  plugins: [
-    new webpack.HotModuleReplacementPlugin(),
-    new HtmlWebpackPlugin({
-      template: './src/index.html'
-    })
-  ],
   module: {
-    loaders: [{
+    rules: [{
       test: /\.css$/,
-      loaders: ['style', 'css']
+      loaders: ['style-loader', 'css-loader']
     }, {
       test: /\.html$/,
       loader: "raw-loader" // loaders: ['raw-loader'] is also perfectly acceptable.
@@ -31,6 +19,8 @@ module.exports = {
   },
   devServer: {
     contentBase: './dist',
-    hot: true
+    hot: true,
+    compress: true,
+    port: 8080,
   }
 }
