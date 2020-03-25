@@ -1,5 +1,6 @@
 // webpack.config.dev.js
 const path = require('path')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
 
 module.exports = {
   devtool: 'cheap-eval-source-map',
@@ -22,5 +23,8 @@ module.exports = {
     hot: true,
     compress: true,
     port: 8080,
-  }
+  },
+  plugins: [
+    new HtmlWebpackPlugin()
+  ]
 }
