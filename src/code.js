@@ -26,7 +26,7 @@ const validBoard = [
   [3, 4, 5, 2, 8, 6, 1, 7, 9],
 ]
 
-function checkArray(arr) {
+function checkArraySlow(arr) {
   const nums = [1, 2, 3, 4, 5, 6, 7, 8, 9]
 
   const sorted = [...arr].sort()
@@ -38,6 +38,11 @@ function checkArray(arr) {
   }
 
   return true
+}
+
+function checkArray(arr) {
+  const set = new Set(arr)
+  return [...set].length === arr.length
 }
 
 function getCells(board) {

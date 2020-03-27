@@ -10,13 +10,16 @@ module.exports = {
     path: path.resolve(__dirname, 'dist'),
   },
   module: {
-    rules: [{
-      test: /\.css$/,
-      loaders: ['style-loader', 'css-loader']
-    }, {
-      test: /\.html$/,
-      loader: "raw-loader" // loaders: ['raw-loader'] is also perfectly acceptable.
-    }]
+    rules: [
+      {
+        test: /\.css$/,
+        loaders: ['style-loader', 'css-loader'],
+      },
+      {
+        test: /\.html$/,
+        loader: 'raw-loader',
+      },
+    ],
   },
   devServer: {
     contentBase: './dist',
@@ -25,6 +28,8 @@ module.exports = {
     port: 8080,
   },
   plugins: [
-    new HtmlWebpackPlugin()
-  ]
+    new HtmlWebpackPlugin({
+      template: './src/index.html',
+    }),
+  ],
 }

@@ -1,1 +1,1 @@
-require('./index.html')
+require('./src/index.html')
