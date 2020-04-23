@@ -4,4 +4,17 @@
 
 body {
   background: powderblue;
+  font-family: avenir;
+}
+
+.wrapper {
+  display: grid;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
+
+.welcome {
+  color: white;
+  font-size: 2rem;
 }
