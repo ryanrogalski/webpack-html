@@ -1,1 +1,1 @@
-console.log('welcome!')
+document.body.append('howdy!')
