@@ -31,34 +31,30 @@ function checkArray(arr) {
   return set.size === arr.length
 }
 
+function getY(board) {
+  return board.map((row, i) => board.map((item) => item[i]))
+}
+
 function getCells(board) {
   const cells = [[], [], [], [], [], [], [], [], []]
 
-  board.forEach((row, rowIndex) => {
-    row.forEach((col, colIndex) => {
-      const cellIndex =
-        Math.floor(rowIndex / 3) * 3 +
-        Math.floor(colIndex / 3)
+  board.forEach((row, r) => {
+    row.forEach((num, n) => {
+      const index =
+        Math.floor(r / 3) * 3 + Math.floor(n / 3)
 
-      cells[cellIndex].push(col)
+      cells[index].push(num)
     })
   })
 
   return cells
 }
-
-function getRows(board) {
-  return board.map((row, i) => board.map((item) => item[i]))
-}
-
 function validateBoard(board) {
-  const xValid = board.every(checkArray)
+  const x = board.every(checkArray)
+  const y = getY(board).every(checkArray)
+  const cells = getCells(board).every(checkArray)
 
-  const yValid = getRows(board).every(checkArray)
-
-  const cellsValid = getCells(board).every(checkArray)
-
-  return xValid && yValid && cellsValid
+  return x && y && cells
 }
 
 console.log(

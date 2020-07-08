@@ -1,3 +1,4 @@
 require('./style.css')
-require('./code.js')
+// require('./sudoku.js')
+require('./list.js')
 require('./index.html')
